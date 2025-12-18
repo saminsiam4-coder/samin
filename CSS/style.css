@@ -156,13 +156,13 @@ span {
     color: white;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 10px 20px;
     flex-wrap: wrap;
     gap: 15px;
 }
 
 .panel-options {
+    text-align: left;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
