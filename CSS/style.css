@@ -28,11 +28,13 @@
 }
 
 .logo {
+    text-align: center;
     background-image: url(/Images/amazon_logo.png);
     height: 50px;
     width: 100%;
     background-size: cover;
 }
+
 
 .add-first {
     color: #cccccc;
