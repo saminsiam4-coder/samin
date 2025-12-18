@@ -1,87 +1,232 @@
-<!-- Font Awesome -->
-<!-- signin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon Sign-In</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Amazon Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .logo {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .logo-text {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .logo-text::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 40%;
+            height: 3px;
+            background-color: #ff9900;
+            border-radius: 2px;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 350px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px 26px;
+            background-color: #fff;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #111;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #111;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 14px;
+            border: 1px solid #a6a6a6;
+            border-radius: 3px;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #e77600;
+            box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+        }
+
+        input::placeholder {
+            color: #767676;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #0f1111;
+            margin-top: -10px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .info-icon {
+            color: #007185;
+            margin-right: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .continue-btn {
+            width: 100%;
+            padding: 8px;
+            background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+            border: 1px solid #a88734;
+            border-radius: 3px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 16px;
+            color: #111;
+        }
+
+        .continue-btn:hover {
+            background: linear-gradient(to bottom, #f5d78e, #edb933);
+        }
+
+        .terms {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #111;
+            margin-bottom: 20px;
+        }
+
+        .terms a {
+            color: #0066c0;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            color: #c45500;
+            text-decoration: underline;
+        }
+
+        .divider {
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .signin-link {
+            font-size: 13px;
+            color: #111;
+            margin-bottom: 8px;
+        }
+
+        .signin-link a {
+            color: #0066c0;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+
+        .signin-link a:hover {
+            color: #c45500;
+            text-decoration: underline;
+        }
+
+        .business-link {
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .business-link a {
+            color: #0066c0;
+            text-decoration: none;
+        }
+
+        .business-link a:hover {
+            color: #c45500;
+            text-decoration: underline;
+        }
+
+        .arrow {
+            color: #0066c0;
+            margin-left: 3px;
+        }
+    </style>
 </head>
 <body>
-    <h1 class="logo">amazon</h1>
-     
-
-    <!-- Sign In Page -->
-    <div id="signinPage" class="container">
-        <div class="auth-box">
-            <h2>Sign in or create account</h2>
-
-            <form id="signinForm">
-                <label for="signinInput">Enter mobile number or email</label>
-                <input type="text" id="signinInput" class="input-box" required>
-
-                <button type="submit" class="continue-btn">Continue</button>
-            </form>
-
-            <p class="terms">
-                By continuing, you agree to Amazon's
-                <a href="#">Conditions of Use</a> and 
-                <a href="#">Privacy Notice</a>.
-            </p>
-
-            <a href="#" class="help-link">Need help?</a>
-
-            <hr>
-
-            <p class="secondary-text"><b>Buying for work?</b></p>
-            <a href="#" class="secondary-link">Create a free business account</a>
-        </div>
-
-        <div class="divider" style="margin-top: 30px;">
-            <span>New to Amazon?</span>
-        </div>
-
-        <button class="continue-btn" onclick="showCreateAccount()" style="background: linear-gradient(to bottom, #f7f8fa, #e7e9ec); border-color: #adb1b8;">
-            Create your Amazon account
-        </button>
+    <div class="logo">
+        <a href="#" class="logo-text">amazon</a>
     </div>
 
-    <!-- Create Account Page -->
-    <div id="createAccountPage" class="container hidden">
-        <div class="auth-box">
-            <h2>Create account</h2>
+    <div class="signup-container">
+        <h1>Create account</h1>
 
-            <form id="createAccountForm">
-                <label for="userName">Your name</label>
-                <input type="text" id="userName" class="input-box" required>
+        <label for="name">Your name</label>
+        <input type="text" id="name" placeholder="First and last name">
 
-                <label for="userEmail">Mobile number or email</label>
-                <input type="text" id="userEmail" class="input-box" required>
+        <label for="email">Mobile number or email</label>
+        <input type="text" id="email">
 
-                <label for="userPassword">Password</label>
-                <input type="password" id="userPassword" class="input-box" placeholder="At least 6 characters" required>
-                <p class="info-text"><span class="info-icon">i</span>Passwords must be at least 6 characters.</p>
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="At least 6 characters">
 
-                <label for="userPasswordConfirm">Re-enter password</label>
-                <input type="password" id="userPasswordConfirm" class="input-box" required>
-
-                <button type="submit" class="continue-btn">Continue</button>
-            </form>
-
-            <p class="terms">
-                By creating an account, you agree to Amazon's
-                <a href="#">Conditions of Use</a> and 
-                <a href="#">Privacy Notice</a>.
-            </p>
-
-            <hr>
-
-            <p class="secondary-text">Already have an account? <a href="#" onclick="showSignIn()" class="secondary-link">Sign-In<span class="arrow">▸</span></a></p>
-            <p class="secondary-text">Buying for work? <a href="#" class="secondary-link">Create a free business account<span class="arrow">▸</span></a></p>
+        <div class="info-text">
+            <span class="info-icon">i</span>
+            <span>Passwords must be at least 6 characters.</span>
         </div>
-    </div>
 
-    <script src="script.js"></script>
+        <label for="repassword">Re-enter password</label>
+        <input type="password" id="repassword">
+
+        <button class="continue-btn">Continue</button>
+
+        <div class="terms">
+            By creating an account, you agree to Amazon's
+            <a href="#">Conditions of Use</a> and
+            <a href="#">Privacy Notice</a>.
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="signin-link">
+            Already have an account?
+            <a href="signin.html">Sign-In<span class="arrow">›</span></a>
+        </div>
+
+
+    </div>
 </body>
 </html>
