@@ -5,6 +5,7 @@
     padding: 0;
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
+    
 }
 
 /** navbar **/
@@ -159,6 +160,7 @@ span {
     padding: 10px 20px;
     flex-wrap: wrap;
     gap: 15px;
+    
 }
 
 .panel-options {
@@ -167,6 +169,7 @@ span {
     flex-wrap: wrap;
     gap: 20px;
     font-size: 0.85rem;
+    
 }
 
 .panel-alt {
