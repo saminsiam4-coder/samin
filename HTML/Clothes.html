@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="/CSS/style.css">
+    <link rel="stylesheet" href="/CSS/clothes.css">
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="nav-logo">
+                <div class="logo"></div>
+            </div>
+
+            <div class="nav-address">
+                <p class="add-first">Deliver to</p>
+                <div class="add-icon">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                    <p class="add-second">Bangladesh</p>
+                </div>
+            </div>
+
+            <div class="nav-search">
+                <select class="search-select">
+                    <option selected="selected">All</option>
+                    <option>Arts &amp; Crafts</option>
+                    <option>Automotive</option>
+                    <option>Baby</option>
+                    <option>Beauty &amp; Personal Care</option>
+                    <option>Books</option>
+                    <option>Boys' Fashion</option>
+                    <option>Computers</option>
+                    <option>Deals</option>
+                    <option>Digital Music</option>
+                    <option>Electronics</option>
+                    <option>Girls' Fashion</option>
+                    <option>Health &amp; Household</option>
+                    <option>Home &amp; Kitchen</option>
+                    <option>Industrial &amp; Scientific</option>
+                    <option>Kindle Store</option>
+                    <option>Luggage</option>
+                    <option>Men's Fashion</option>
+                    <option>Movies &amp; TV</option>
+                    <option>Music, CDs &amp; Vinyl</option>
+                    <option>Pet Supplies</option>
+                    <option>Prime Video</option>
+                    <option>Software</option>
+                    <option>Sports &amp; Outdoors</option>
+                    <option>Tools &amp; Home Improvement</option>
+                    <option>Toys &amp; Games</option>
+                    <option>Video Games</option>
+                    <option>Women's Fashion</option>
+                </select>
+                <input class="search-input" type="text" placeholder="Search....">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+
+
+<div class="nav-language">
+    <select class="language-select">
+        <option selected>English - EN</option>
+        <option>español - ES</option>
+        <option>العربية - AR</option>
+        <option>Deutsch - DE</option>
+        <option>עברית - HE</option>
+        <option>한국어 - KO</option>
+        <option>português - PT</option>
+        <option>中文 (简体) - ZH</option>
+        <option>中文 (繁體) - ZH</option>
+    </select>
+    <i class="fa-solid fa-globe"></i>
+</div>
+
+
+<div class="nav-signin">
+    <p><span>Hello, sign in</span></p>
+    <p class="nav-second">
+        Account & Lists
+        <i class="fa-sharp fa-solid fa-circle-chevron-down"></i>
+    </p>
+
+    <!-- DROPDOWN MENU -->
+    <div class="signin-dropdown">
+        <button class="signin-btn" onclick="window.location.href='../HTML/signin.html'">
+    Sign in
+         </button>
+
+        <p class="new-customer">New customer? <a href="#">Start here.</a></p>
+
+        <div class="dropdown-sections">
+            <div class="section">
+                <h4>Your Lists</h4>
+                <a href="#">Create a List</a>
+                <a href="#">Find a List or Registry</a>
+            </div>
+
+            <div class="section">
+                <h4>Your Account</h4>
+                <a href="#">Account</a>
+                <a href="#">Orders</a>
+                <a href="#">Recommendations</a>
+                <a href="#">Browsing History</a>
+                <a href="#">Your Shopping preferences</a>
+                <a href="#">Watchlist</a>
+                <a href="#">Video Purchases & Rentals</a>
+                <a href="#">Kindle Unlimited</a>
+                <a href="#">Content & Devices</a>
+                <a href="#">Subscribe & Save Items</a>
+                <a href="#">Memberships & Subscriptions</a>
+                <a href="#">Music Library</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div>
+                <a href = '../HTML/signin.html'><p class="nav-second"><span>Returns</span></p>
+                <p class="nav-second">
+                    & Orders
+                    <i class="fa-sharp fa-solid fa-circle-chevron-down"></i>
+                </p>
+                </a>
+            </div>
+
+            <div class="nav-cart">
+                <i class="fa-solid fa-cart-shopping"></i> 
+                Cart
+            </div>
+        </div>
+
+        <div class="bottom-panel">
+            <div class="panel-alt">
+                <i class="fa-solid fa-bars"></i>
+                All
+            </div>
+            <div class="panel-options">
+                <p>Today's Deals</p>
+                <p>Customer Service</p>
+                <p>Registry</p>
+                <p>Gift Cards</p>
+                <p>Sell</p>
+            </div>
+            <div class="panel-deals">
+                Shop deals in Electronics
+            </div>
+        </div>
+    </header>
+
+
+
+
+
+
+<!-- Add this below your header and above the footer -->
+<section class="product-section">
+    <h2>Featured Products</h2>
+    <div class="product-grid">
+        <div class="product-card">
+            <img class="Wireless_Headphones" src="../Images/shirt.webp" alt="Product 1">
+            <h3>Blue Shirt</h3>
+            <p class="price">BDT 799</p>
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+        <div class="product-card">
+            <img class ="smart_watch" 
+            src="../Images/pujabi.jpg" alt="Product 2">
+            <h3>White Panjabi</h3>
+            <p class="price">BDT 7599</p>
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+        <div class="product-card">
+            <img class ="Bluetooth_Speaker" 
+            src="../Images/saree.jpg" alt="Product 3">
+            <h3>Banarasi Saree</h3>
+            <p class="price">BDT 17,000</p>
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+        <div class="product-card">
+            <img class ="Laptop_Backpack" 
+            src="../Images/tops.jpg" alt="Product 4">
+            <h3>Tops</h3>
+            <p class="price">BDT 4000</p>
+            <button class="buy-btn">Add to Cart</button>
+        </div>
+    </div>
+</section>
+
+
+
+    <footer>
+        <div class="foot-panel1">
+            Back to Top
+        </div>
+
+        <div class="foot-panel2">
+            <ul>
+                <li>Get to Know Us</li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Amazon Newsletter</a></li>
+                <li><a href="#">About Amazon</a></li>
+                <li><a href="#">Accessibility</a></li>
+                <li><a href="#">Sustainability</a></li>
+                <li><a href="#">Press Center</a></li>
+                <li><a href="#">Investor Relations</a></li>
+                <li><a href="#">Amazon Devices</a></li>
+                <li><a href="#">Amazon Science</a></li>
+            </ul>
+            <ul>
+                <li>Make Money with Us</li>
+                <li><a href="#">Sell products on Amazon</a></li>
+                <li><a href="#">Sell on Amazon Business</a></li>
+                <li><a href="#">Sell apps on Amazon</a></li>
+                <li><a href="#">Become an Affiliate</a></li>
+                <li><a href="#">Advertise Your Products</a></li>
+                <li><a href="#">Self-Publish with Us</a></li>
+                <li><a href="#">Host an Amazon Hub</a></li>
+                <li><a href="#">See More Make Money with Us</a></li>
+            </ul>
+            <ul>
+                <li>Amazon Payment Products</li>
+                <li><a href="#">Amzon Business Card</a></li>
+                <li><a href="#">Shop with Points</a></li>
+                <li><a href="#">Reload Your Balance</a></li>
+                <li><a href="#">Amazon Currency Converter</a></li>
+            </ul>
+            <ul>
+                <li>Let Us Help You</li>
+                <li><a href="#">Amazon and COVID-19</a></li>
+                <li><a href="#">Your Account</a></li>
+                <li><a href="#">Your Orders</a></li>
+                <li><a href="#">Shipping Rates & Policies</a></li>
+                <li><a href="#">Return & Replacements</a></li>
+                <li><a href="#">Manage Your Content and Devices</a></li>
+                <li><a href="#">Amazon Assistant</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+        </div>
+
+        <div class="foot-panel3">
+            <div class="logo">
+
+            </div>
+        </div>
+
+        <div class="foot-panel4">
+            <div class="pages">
+                <a href="#">Conditions of Use</a>
+                <a href="#">Privacy Notice</a>
+                <a href="#">Your Ads Privacy Choices</a>
+            </div>
+            <div class="copyright">
+                © 1996-2023, Amazon.com, Inc. or its affiliates
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
