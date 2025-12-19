@@ -4,39 +4,227 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Sign-In</title>
-    <link rel="stylesheet" href="../CSS/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .signin-container {
+            width: 100%;
+            max-width: 350px;
+            padding: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .signin-box {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            margin-top: 15px;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #a6a6a6;
+            border-radius: 3px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .input-box:focus {
+            outline: none;
+            border-color: #e77600;
+            box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+        }
+
+        .signin-continue {
+            width: 100%;
+            padding: 8px;
+            background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+            border: 1px solid #a88734;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+
+        .signin-continue:hover {
+            background: linear-gradient(to bottom, #f5d78e, #edb933);
+        }
+
+        .terms {
+            font-size: 12px;
+            margin-top: 15px;
+            color: #111;
+        }
+
+        .terms a {
+            color: #0066c0;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            color: #c45500;
+            text-decoration: underline;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #e7e7e7;
+        }
+
+        p {
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .signin-box > a {
+            color: #0066c0;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .signin-box > a:hover {
+            color: #c45500;
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #c40000;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success-message {
+            color: #067d62;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-
     <div class="signin-container">
         <h1 class="logo">amazon</h1>
-
-
         <div class="signin-box">
             <h2>Sign in or create account</h2>
-
             <label>Enter mobile number or email</label>
-            <input type="text" class="input-box">
-
-
+            <input type="text" id="email" class="input-box" placeholder="Email or phone number">
             <label>Enter Password</label>
-            <input type="text" class="input-box">
-
-
-            <button class="signin-continue">Continue</button>
-
+            <input type="password" id="password" class="input-box" placeholder="Password">
+            
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            
+            <button class="signin-continue" id="signinBtn">Continue</button>
             <p class="terms">
                 By continuing, you agree to Amazon's
                 <a href="conditionpage.html">Conditions of Use</a> and 
                 <a href="privacy.html">Privacy Notice</a>.
             </p>
-
-
             <hr>
-
             <p><b>Buying for work?</b></p>
             <a href="signup.html">Create a free account</a>
         </div>
     </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000'; // Change this to your backend URL
+
+        document.getElementById('signinBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            // Hide previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            // Validation
+            if (!email || !password) {
+                errorMessage.textContent = 'Please enter both email and password';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/signin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success
+                    successMessage.textContent = 'Login successful! Redirecting...';
+                    successMessage.style.display = 'block';
+                    
+                    // Store token and user info
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user_id', data.user_id);
+                    localStorage.setItem('first_name', data.first_name);
+
+                    // Redirect after 1 second
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html'; // Change to your dashboard page
+                    }, 1000);
+                } else {
+                    // Error
+                    errorMessage.textContent = data.error || 'Login failed';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Connection error. Please try again.';
+                errorMessage.style.display = 'block';
+                console.error('Error:', error);
+            }
+        });
+
+        // Allow Enter key to submit
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('signinBtn').click();
+            }
+        });
+    </script>
 </body>
 </html>
