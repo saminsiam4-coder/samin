@@ -109,6 +109,37 @@
             font-size: 14px;
         }
 
+        /* --- NEW STYLES FOR MESSAGES --- */
+        .message-box {
+            font-size: 12px;
+            margin-bottom: 15px;
+            display: none; /* Hidden by default */
+            padding: 10px;
+            border-radius: 4px;
+            line-height: 1.4;
+        }
+
+        .error-msg {
+            color: #ba0933;
+            border: 1px solid #ba0933;
+            background-color: #fff4f4;
+            display: flex;
+            align-items: center;
+        }
+        
+        .success-msg {
+            color: #007600;
+            border: 1px solid #007600;
+            background-color: #f4fff4;
+        }
+
+        .error-icon {
+            margin-right: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        /* ------------------------------- */
+
         .signupBtn {
             width: 100%;
             padding: 8px;
@@ -195,6 +226,14 @@
             <span>Passwords must be at least 6 characters.</span>
         </div>
 
+        <div id="errorMessage" class="message-box error-msg">
+            <span class="error-icon">!</span>
+            <span id="errorText">Error message here</span>
+        </div>
+        <div id="successMessage" class="message-box success-msg">
+            Success message here
+        </div>
+
         <button id="signupBtn" class="signupBtn">Continue</button>
 
         <div class="terms">
@@ -211,49 +250,87 @@
         </div>
     </div>
 
-    <script>
-        // REPLACE THIS with your actual backend URL
-        const API_URL = "http://localhost:3000"; 
+<script>
+    // IMPORTANT: Check your Backend Port (e.g., 5500 or 3000)
+    const API_URL = 'http://localhost:5500'; 
 
-        document.getElementById("signupBtn").addEventListener("click", async () => {
-            const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+    document.getElementById('signupBtn').addEventListener('click', async () => {
+        // Get values
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Get message containers
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const successMessage = document.getElementById('successMessage');
 
-            if (!name || !email || !password) {
-                alert("All fields required");
-                return;
+        // Helper to show errors
+        const showError = (msg) => {
+            if (errorMessage && errorText) {
+                errorText.textContent = msg;
+                errorMessage.style.display = 'flex'; // Use flex to align icon
+                successMessage.style.display = 'none';
+            } else {
+                alert(msg);
+            }
+        };
+
+        // Helper to show success
+        const showSuccess = (msg) => {
+            if (successMessage) {
+                successMessage.textContent = msg;
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            } else {
+                alert(msg);
+            }
+        };
+
+        // Reset previous messages on click
+        if (errorMessage) errorMessage.style.display = 'none';
+        if (successMessage) successMessage.style.display = 'none';
+
+        // Validation
+        if (!name || !email || !password) {
+            showError('Enter your name, email, and password');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/api/auth/signup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showSuccess('Account created successfully! Redirecting...');
+                
+                // Redirect to Sign In page after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = 'signin.html'; 
+                }, 1500);
+            } else {
+                showError(data.error || 'Registration failed');
             }
 
-            try {
-                const response = await fetch(`${API_URL}/api/auth/signup`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        password
-                    })
-                });
+        } catch (error) {
+            console.error('Error:', error);
+            showError(`Connection error. Is backend running on port 5500?`);
+        }
+    });
 
-                // Fixed: used 'response' instead of 'res'
-                const data = await response.json();
-
-                // Fixed: used 'response' instead of 'res'
-                if (!response.ok) {
-                    alert(data.error || "Registration failed");
-                } else {
-                    alert("Account created successfully");
-                    window.location.href = "/signin.html";
-                }
-
-            } catch (err) {
-                console.error(err);
-                alert("Server error. Ensure your backend is running.");
-            }
-        });
-    </script>
+    // Allow Enter key to submit
+    document.getElementById('password').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('signupBtn').click();
+        }
+    });
+</script>
 </body>
 </html>
