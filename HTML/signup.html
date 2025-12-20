@@ -121,7 +121,7 @@
             color: #111;
         }
 
-        .continue-btn:hover {
+        .signupBtn:hover {
             background: linear-gradient(to bottom, #f5d78e, #edb933);
         }
 
@@ -146,12 +146,14 @@
             margin: 20px 0;
             text-align: center;
             position: relative;
+            border-top: 1px solid #e7e7e7;
         }
 
         .signin-link {
             font-size: 13px;
             color: #111;
             margin-bottom: 8px;
+            margin-top: 20px;
         }
 
         .signin-link a {
@@ -161,21 +163,6 @@
         }
 
         .signin-link a:hover {
-            color: #c45500;
-            text-decoration: underline;
-        }
-
-        .business-link {
-            font-size: 13px;
-            margin-top: 8px;
-        }
-
-        .business-link a {
-            color: #0066c0;
-            text-decoration: none;
-        }
-
-        .business-link a:hover {
             color: #c45500;
             text-decoration: underline;
         }
@@ -208,8 +195,7 @@
             <span>Passwords must be at least 6 characters.</span>
         </div>
 
-
-        <button class="signupBtn">Continue</button>
+        <button id="signupBtn" class="signupBtn">Continue</button>
 
         <div class="terms">
             By creating an account, you agree to Amazon's
@@ -223,50 +209,51 @@
             Already have an account?
             <a href="signin.html">Sign-In<span class="arrow">›</span></a>
         </div>
-
-
     </div>
+
+    <script>
+        // REPLACE THIS with your actual backend URL
+        const API_URL = "http://localhost:3000"; 
+
+        document.getElementById("signupBtn").addEventListener("click", async () => {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (!name || !email || !password) {
+                alert("All fields required");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/signup`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password
+                    })
+                });
+
+                // Fixed: used 'response' instead of 'res'
+                const data = await response.json();
+
+                // Fixed: used 'response' instead of 'res'
+                if (!response.ok) {
+                    alert(data.error || "Registration failed");
+                } else {
+                    alert("Account created successfully");
+                    window.location.href = "/signin.html";
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert("Server error. Ensure your backend is running.");
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-
-<script>
-document.getElementById("signupBtn").addEventListener("click", async () => {
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if (!name || !email || !password) {
-        alert("All fields required");
-        return;
-    }
-
-    try {
-       const response = await fetch(`${API_URL}/api/auth/signup`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name,
-                email,
-                password
-            })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            alert(data.error);
-        } else {
-            alert("Account created successfully");
-            window.location.href = "signin.html";
-        }
-
-    } catch (err) {
-        console.error(err);
-        alert("Server error");
-    }
-});
-</script>
