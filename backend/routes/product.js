@@ -1,22 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
+const Product = require('../models/productModel'); // Import the class above
 
-// Get all products
-router.get('/', (req, res) => {
-    db.query(`SELECT * FROM products`, (err, results) => {
-        if (err) return res.status(500).json({ error: err });
+router.get('/search', async (req, res) => {
+    const { q } = req.query;
+
+    // 1. Check if search term exists
+    if (!q) {
+        return res.status(400).json({ message: 'Please enter a search term' });
+    }
+
+    try {
+        // 2. Call the Model method
+        const results = await Product.search(q);
+
+        // 3. Handle "Not Found" case
+        if (results.length === 0) {
+            return res.json({ message: 'No products found', data: [] });
+        }
+
+        // 4. Return results
         res.json(results);
-    });
-});
 
-// Get single product by ID
-router.get('/:id', (req, res) => {
-    db.query(`SELECT * FROM products WHERE product_id = ?`, [req.params.id], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        if (!results.length) return res.status(404).json({ error: 'Product not found' });
-        res.json(results[0]);
-    });
+    } catch (err) {
+        console.error("Search Error:", err);
+        res.status(500).send('Server error');
+    }
 });
 
 module.exports = router;

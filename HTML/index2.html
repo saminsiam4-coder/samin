@@ -5,33 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon</title>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- CSS -->
     <link rel="stylesheet" href="/CSS/style.css">
     <style>
-        .user-name {
-            font-weight: 600;
-            color: #fff;
+        /* Added a specific style for the username to make it bold */
+        .user-name-bold {
+            font-weight: 700;
         }
-        .signout-option {
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-            margin-top: 10px;
-        }
-        .signout-btn {
-            background-color: #f0c14b;
-            border: 1px solid #a88734;
-            padding: 8px 20px;
-            cursor: pointer;
-            border-radius: 3px;
-            width: 100%;
-            font-size: 13px;
-        }
-        .signout-btn:hover {
-            background-color: #ddb347;
+        /* Style for the Sign Out section */
+        #signedInView {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -56,6 +44,7 @@
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
             </div>
 
+
             <div class="nav-language">
                 <select class="language-select">
                     <option selected>English - EN</option>
@@ -71,15 +60,16 @@
                 <i class="fa-solid fa-globe"></i>
             </div>
 
+
             <div class="nav-signin">
-                <p><span id="greeting">Hello, sign in</span></p>
+                <p><span id="nav-greeting">Hello, sign in</span></p>
                 <p class="nav-second">
                     Account & Lists
                     <i class="fa-sharp fa-solid fa-circle-chevron-down"></i>
                 </p>
 
-                <!-- DROPDOWN MENU -->
                 <div class="signin-dropdown">
+                    
                     <div id="signedOutView">
                         <button class="signin-btn" onclick="window.location.href='../HTML/signin.html'">
                             Sign in
@@ -88,9 +78,10 @@
                     </div>
 
                     <div id="signedInView" style="display: none;">
-                        <div class="signout-option">
-                            <button class="signout-btn" onclick="signOut()">Sign Out</button>
-                        </div>
+                        <p style="margin-bottom: 10px; font-size: 13px;">Manage Your Account</p>
+                        <button class="signin-btn" onclick="handleSignOut()">
+                            Sign Out
+                        </button>
                     </div>
 
                     <div class="dropdown-sections">
@@ -130,7 +121,7 @@
             </div>
 
             <div class="nav-cart">
-                <i class="fa-solid fa-cart-shopping"></i> 
+                <i class="fa-solid fa-cart-shopping"></i>
                 Cart
             </div>
         </div>
@@ -142,13 +133,15 @@
             </div>
             <div class="panel-options">
                 <p>Top Deals</p>
+
+
             </div>
         </div>
     </header>
 
     <div class="hero-section">
         <div class="hero-msg">
-            <p>You are on amazon.com. You can also shop on Amazon for millions of products with fast local
+            <p>You are on amazon.com. You can also shop on Amazon  for millions of products with fast local
                 delivery. </p>
         </div>
     </div>
@@ -156,14 +149,16 @@
     <div class="shop-section">
         <div class="box1 box">
             <div class="box-content"><a class="Ele" href='../HTML/Clothes.html'>
-                <h2>Clothes</h2>
-                <div class="box-img" style="background-image: url('/Images/box1_image.jpg');"></div>
-                <p>See More</p></a>
+                    <h2>Clothes</h2>
+                    <div class="box-img" style="background-image: url('/Images/box1_image.jpg');"></div>
+                    <p>See More</p>
+                </a>
             </div>
         </div>
         <div class="box2 box">
             <div class="box-content">
                 <a class="Ele" href='../HTML/Health.html'>
+
                     <h2>Health & Personal Care</h2>
                     <div class="box-img" style="background-image: url('/Images/box2_image.jpg');"></div>
                     <p>See More</p>
@@ -276,7 +271,9 @@
         </div>
 
         <div class="foot-panel3">
-            <div class="logo"></div>
+            <div class="logo">
+
+            </div>
         </div>
 
         <div class="foot-panel4">
@@ -293,110 +290,125 @@
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Sidebar Menu -->
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
             <i class="fa-solid fa-user-circle"></i>
-            <span id="sidebarGreeting">Hello, Sign in</span>
+            <span id="sidebar-greeting">Hello, Sign in</span>
             <button class="close-btn" id="closeSidebar">&times;</button>
         </div>
 
         <div class="sidebar-section">
             <div class="sidebar-title"><a href="privacy.html">Privacy Notice</a></div>
             <div class="sidebar-item"><a href="signin.html">Your Account</a></div>
-            <div class="sidebar-item" id="sidebarSignInOut">
-                <a href="signin.html">Sign in</a>
-            </div>
+            <div class="sidebar-item" id="sidebar-signin-link"><a href="signin.html">Sign in</a></div>
         </div>
     </div>
 
-    <script>
-        // Check if user is signed in when page loads
-        window.addEventListener('DOMContentLoaded', function() {
-            checkUserSignIn();
-        });
 
-        function checkUserSignIn() {
-            // Check if user data exists in localStorage
-            const user = localStorage.getItem('currentUser');
-            
-            if (user) {
-                const userData = JSON.parse(user);
-                displaySignedInUser(userData);
-            } else {
-                displaySignedOutUser();
+
+
+
+
+<script>
+    // --- 1. USER LOGIN CHECK LOGIC ---
+    document.addEventListener('DOMContentLoaded', function() {
+        checkUserLogin();
+    });
+
+    function checkUserLogin() {
+        // Retrieve the user string from localStorage
+        const userStr = localStorage.getItem('currentUser');
+
+        if (userStr) {
+            // Parse the JSON string back into an object
+            const user = JSON.parse(userStr);
+            const userName = user.first_name || user.email || 'Customer';
+
+            // A. Update Top Navigation Greeting
+            const navGreeting = document.getElementById('nav-greeting');
+            if (navGreeting) {
+                navGreeting.innerHTML = `Hello, <span class="user-name-bold">${userName}</span>`;
             }
-        }
 
-        function displaySignedInUser(userData) {
-            // Update greeting in header
-            const greeting = document.getElementById('greeting');
-            greeting.innerHTML = `Hello, <span class="user-name">${userData.name || userData.email}</span>`;
-            
-            // Update sidebar greeting
-            const sidebarGreeting = document.getElementById('sidebarGreeting');
-            sidebarGreeting.textContent = `Hello, ${userData.name || userData.email}`;
-            
-            // Show signed-in view, hide signed-out view
-            document.getElementById('signedInView').style.display = 'block';
-            document.getElementById('signedOutView').style.display = 'none';
-            
-            // Update sidebar sign in/out link
-            const sidebarSignInOut = document.getElementById('sidebarSignInOut');
-            sidebarSignInOut.innerHTML = '<a href="#" onclick="signOut(); return false;">Sign Out</a>';
-        }
+            // B. Update Dropdown Menu (Hide "Sign In" button, Show "Sign Out")
+            const signedOutView = document.getElementById('signedOutView');
+            const signedInView = document.getElementById('signedInView');
+            if (signedOutView && signedInView) {
+                signedOutView.style.display = 'none';
+                signedInView.style.display = 'block';
+            }
 
-        function displaySignedOutUser() {
-            // Reset to default state
-            document.getElementById('greeting').textContent = 'Hello, sign in';
-            document.getElementById('sidebarGreeting').textContent = 'Hello, Sign in';
-            document.getElementById('signedInView').style.display = 'none';
-            document.getElementById('signedOutView').style.display = 'block';
+            // C. Update Sidebar Greeting
+            const sidebarGreeting = document.getElementById('sidebar-greeting');
+            if (sidebarGreeting) {
+                sidebarGreeting.textContent = `Hello, ${userName}`;
+            }
             
-            const sidebarSignInOut = document.getElementById('sidebarSignInOut');
-            sidebarSignInOut.innerHTML = '<a href="signin.html">Sign in</a>';
-        }
+            // D. Update Sidebar "Sign in" link to "Sign Out"
+            const sidebarSignInLink = document.getElementById('sidebar-signin-link');
+            if(sidebarSignInLink) {
+                sidebarSignInLink.innerHTML = `<a href="#" onclick="handleSignOut()">Sign Out</a>`;
+            }
 
-        function signOut() {
-            // Clear user data from localStorage
-            localStorage.removeItem('currentUser');
-            
-            // Update display
-            displaySignedOutUser();
-            
-            // Optional: Show a message
-            alert('You have been signed out successfully');
+        } else {
+            // If no user is found, keep defaults (Sign In view)
+            console.log("No user logged in");
         }
+    }
 
-        // Sidebar menu functionality (if you have it)
+    // --- 2. SIGN OUT FUNCTION ---
+    function handleSignOut() {
+        // Remove user data
+        localStorage.removeItem('currentUser');
+        // Reload the page to reset the view
+        window.location.reload();
+    }
+
+
+    // --- 3. EXISTING SIDEBAR MENU LOGIC ---
+    (function() {
         document.addEventListener('DOMContentLoaded', function() {
             const panelAlt = document.querySelector('.panel-alt');
+            const closeSidebar = document.getElementById('closeSidebar');
             const sidebarMenu = document.getElementById('sidebarMenu');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
-            const closeSidebar = document.getElementById('closeSidebar');
+
+            function openSidebarMenu() {
+                sidebarMenu.classList.add('active');
+                sidebarOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSidebarMenu() {
+                sidebarMenu.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
 
             if (panelAlt) {
-                panelAlt.addEventListener('click', function() {
-                    sidebarMenu.classList.add('active');
-                    sidebarOverlay.classList.add('active');
-                });
+                panelAlt.addEventListener('click', openSidebarMenu);
             }
 
             if (closeSidebar) {
-                closeSidebar.addEventListener('click', function() {
-                    sidebarMenu.classList.remove('active');
-                    sidebarOverlay.classList.remove('active');
-                });
+                closeSidebar.addEventListener('click', closeSidebarMenu);
             }
 
             if (sidebarOverlay) {
-                sidebarOverlay.addEventListener('click', function() {
-                    sidebarMenu.classList.remove('active');
-                    sidebarOverlay.classList.remove('active');
+                sidebarOverlay.addEventListener('click', closeSidebarMenu);
+            }
+
+            const footPanel1 = document.querySelector('.foot-panel1');
+            if (footPanel1) {
+                footPanel1.addEventListener('click', function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 });
             }
         });
-    </script>
-</body>
+    })();
+</script>
 
+</body>
 </html>

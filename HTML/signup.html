@@ -213,7 +213,7 @@
         <h1>Create account</h1>
 
         <label for="name">Your name</label>
-        <input type="text" id="name" placeholder="First and last name">
+        <input type="text" id="first_name" placeholder="First and last name">
 
         <label for="email">Mobile number or email</label>
         <input type="text" id="email">
@@ -256,7 +256,7 @@
 
     document.getElementById('signupBtn').addEventListener('click', async () => {
         // Get values
-        const name = document.getElementById('name').value;
+        const name = document.getElementById('first_name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         
@@ -292,7 +292,7 @@
         if (successMessage) successMessage.style.display = 'none';
 
         // Validation
-        if (!name || !email || !password) {
+        if (!first_name || !email || !password) {
             showError('Enter your name, email, and password');
             return;
         }

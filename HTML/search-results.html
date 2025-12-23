@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Amazon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/CSS/style.css">
+    <style>
+        .user-name-bold {
+            font-weight: 700;
+        }
+
+        #signedInView {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        /* Search Results Specific Styles */
+        .search-results-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .search-header {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .search-query {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .search-query .query-text {
+            color: #c7511f;
+            font-weight: 600;
+        }
+
+        .results-count {
+            color: #565959;
+            font-size: 14px;
+        }
+
+        .search-history-section {
+            background-color: #f7f8f8;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #febd69;
+        }
+
+        .search-history-section h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #0f1111;
+        }
+
+        .history-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .history-item {
+            background-color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #d5d9d9;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .history-item:hover {
+            background-color: #febd69;
+            border-color: #febd69;
+        }
+
+        .clear-history-btn {
+            background-color: transparent;
+            border: none;
+            color: #007185;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: underline;
+            padding: 0;
+            margin-left: 15px;
+        }
+
+        .clear-history-btn:hover {
+            color: #c7511f;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .result-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid #e7e7e7;
+        }
+
+        .result-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+        }
+
+        .result-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .result-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #0f1111;
+        }
+
+        .result-card .category {
+            font-size: 12px;
+            color: #007185;
+            margin-bottom: 8px;
+            display: inline-block;
+            background-color: #f0f2f2;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .result-card .price {
+            font-size: 20px;
+            color: #b12704;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .result-card .description {
+            font-size: 13px;
+            color: #565959;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            background-color: #ffd814;
+            border: 1px solid #fcd200;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #f7ca00;
+        }
+
+        .no-results {
+            background-color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .no-results i {
+            font-size: 64px;
+            color: #c7c7c7;
+            margin-bottom: 20px;
+        }
+
+        .no-results h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #0f1111;
+        }
+
+        .no-results p {
+            color: #565959;
+            font-size: 14px;
+        }
+
+        /* Highlight matched text */
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .search-query {
+                font-size: 18px;
+            }
+
+            .result-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="nav-logo">
+                <a href="../index.html">
+                    <div class="logo"></div>
+                </a>
+            </div>
+
+            <div class="nav-address">
+                <p class="add-first">Deliver to</p>
+                <div class="add-icon">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                    <p class="add-second">Bangladesh</p>
+                </div>
+            </div>
+
+            <div class="nav-search">
+                <input class="search-input" type="text" placeholder="Search...." id="searchInput">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+
+            <div class="nav-language">
+                <select class="language-select">
+                    <option selected>English - EN</option>
+                    <option>español - ES</option>
+                    <option>العربية - AR</option>
+                    <option>Deutsch - DE</option>
+                    <option>עברית - HE</option>
+                    <option>한국어 - KO</option>
+                    <option>português - PT</option>
+                    <option>中文 (简体) - ZH</option>
+                    <option>中文 (繁體) - ZH</option>
+                </select>
+                <i class="fa-solid fa-globe"></i>
+            </div>
+
+            <div class="nav-signin">
+                <p><span id="nav-greeting">Hello, sign in</span></p>
+                <p class="nav-second">
+                    Account & Lists
+                    <i class="fa-sharp fa-solid fa-circle-chevron-down"></i>
+                </p>
+
+                <div class="signin-dropdown">
+                    <div id="signedOutView">
+                        <button class="signin-btn" onclick="window.location.href='../HTML/signin.html'">
+                            Sign in
+                        </button>
+                        <p class="new-customer">New customer? <a href="#">Start here.</a></p>
+                    </div>
+
+                    <div id="signedInView" style="display: none;">
+                        <p style="margin-bottom: 10px; font-size: 13px;">Manage Your Account</p>
+                        <button class="signin-btn" onclick="handleSignOut()">
+                            Sign Out
+                        </button>
+                    </div>
+
+                    <div class="dropdown-sections">
+                        <div class="section">
+                            <h4>Your Lists</h4>
+                            <a href="#">Create a List</a>
+                            <a href="#">Find a List or Registry</a>
+                        </div>
+
+                        <div class="section">
+                            <h4>Your Account</h4>
+                            <a href="#">Account</a>
+                            <a href="#">Orders</a>
+                            <a href="#">Recommendations</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <a href='../HTML/signin.html'>
+                    <p class="nav-second"><span>Returns</span></p>
+                    <p class="nav-second">
+                        & Orders
+                        <i class="fa-sharp fa-solid fa-circle-chevron-down"></i>
+                    </p>
+                </a>
+            </div>
+
+            <div class="nav-cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                Cart
+            </div>
+        </div>
+
+        <div class="bottom-panel">
+            <div class="panel-alt">
+                <i class="fa-solid fa-bars"></i>
+                All
+            </div>
+            <div class="panel-options">
+                <p>Top Deals</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="search-results-container">
+        <!-- Search Header -->
+        <div class="search-header">
+            <div class="search-query">
+                Search results for: <span class="query-text" id="searchQueryText"></span>
+            </div>
+            <div class="results-count" id="resultsCount"></div>
+        </div>
+
+        <!-- Search History -->
+        <div class="search-history-section" id="searchHistorySection" style="display: none;">
+            <h3>
+                Recent Searches
+                <button class="clear-history-btn" onclick="clearHistory()">Clear History</button>
+            </h3>
+            <div class="history-items" id="historyItems"></div>
+        </div>
+
+        <!-- Results Grid -->
+        <div class="results-grid" id="resultsGrid"></div>
+
+        <!-- No Results Message -->
+        <div class="no-results" id="noResults" style="display: none;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <h2>No results found</h2>
+            <p>Try different keywords or check your spelling</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="foot-panel1">Back to Top</div>
+        <div class="foot-panel2">
+            <ul>
+                <li>Get to Know Us</li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Amazon Newsletter</a></li>
+                <li><a href="#">About Amazon</a></li>
+            </ul>
+            <ul>
+                <li>Make Money with Us</li>
+                <li><a href="#">Sell products on Amazon</a></li>
+                <li><a href="#">Sell on Amazon Business</a></li>
+            </ul>
+            <ul>
+                <li>Amazon Payment Products</li>
+                <li><a href="#">Amazon Business Card</a></li>
+                <li><a href="#">Shop with Points</a></li>
+            </ul>
+            <ul>
+                <li>Let Us Help You</li>
+                <li><a href="#">Amazon and COVID-19</a></li>
+                <li><a href="#">Your Account</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+        </div>
+        <div class="foot-panel3">
+            <div class="logo"></div>
+        </div>
+        <div class="foot-panel4">
+            <div class="pages">
+                <a href="#">Conditions of Use</a>
+                <a href="#">Privacy Notice</a>
+                <a href="#">Your Ads Privacy Choices</a>
+            </div>
+            <div class="copyright">
+                © 1996-2023, Amazon.com, Inc. or its affiliates
+            </div>
+        </div>
+    </footer>
+
+    <!-- Include products database -->
+    <script src="/JS/products-data.js"></script>
+    <script src="/JS/search.js"></script>
+
+    <script>
+        // User login check
+        document.addEventListener('DOMContentLoaded', function() {
+            checkUserLogin();
+            displaySearchResults();
+        });
+
+        function checkUserLogin() {
+            const userStr = localStorage.getItem('currentUser');
+            const simpleName = localStorage.getItem('first_name');
+
+            let displayName = null;
+
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    displayName = user.first_name || user.email || 'Customer';
+                } catch (e) {
+                    console.error("Error parsing user data");
+                }
+            } else if (simpleName) {
+                displayName = simpleName;
+            }
+
+            if (displayName) {
+                const navGreeting = document.getElementById('nav-greeting');
+                if (navGreeting) {
+                    navGreeting.innerHTML = `Hello, <span class="user-name-bold">${displayName}</span>`;
+                }
+
+                const signedOutView = document.getElementById('signedOutView');
+                const signedInView = document.getElementById('signedInView');
+                if (signedOutView && signedInView) {
+                    signedOutView.style.display = 'none';
+                    signedInView.style.display = 'block';
+                }
+            }
+        }
+
+        function handleSignOut() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('first_name');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_id');
+            window.location.reload();
+        }
+
+        // Display search results
+        function displaySearchResults() {
+            // Get search query from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+
+            if (!query) {
+                window.location.href = '../index.html';
+                return;
+            }
+
+            // Update search input
+            document.getElementById('searchInput').value = query;
+
+            // Display query
+            document.getElementById('searchQueryText').textContent = query;
+
+            // Search products
+            const results = window.searchFunctions.searchProducts(query);
+
+            // Display results count
+            document.getElementById('resultsCount').textContent = 
+                `${results.length} result${results.length !== 1 ? 's' : ''} found`;
+
+            // Display results or no results message
+            if (results.length > 0) {
+                displayProducts(results, query);
+            } else {
+                document.getElementById('noResults').style.display = 'block';
+            }
+
+            // Display search history
+            displaySearchHistory();
+        }
+
+        function displayProducts(products, query) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            resultsGrid.innerHTML = '';
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                
+                // Highlight matching text
+                const highlightedName = window.searchFunctions.highlightText(product.name, query);
+                const highlightedDescription = window.searchFunctions.highlightText(product.description, query);
+
+                card.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='/Images/placeholder.jpg'">
+                    <span class="category">${product.category}</span>
+                    <h3>${highlightedName}</h3>
+                    <div class="price">$${product.price.toFixed(2)}</div>
+                    <div class="description">${highlightedDescription}</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                    </button>
+                `;
+
+                resultsGrid.appendChild(card);
+            });
+        }
+
+        function displaySearchHistory() {
+            const history = window.searchFunctions.getSearchHistory();
+            
+            if (history.length === 0) {
+                return;
+            }
+
+            const section = document.getElementById('searchHistorySection');
+            const container = document.getElementById('historyItems');
+            
+            section.style.display = 'block';
+            container.innerHTML = '';
+
+            history.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.textContent = item;
+                historyItem.onclick = () => {
+                    window.searchFunctions.performSearch(item);
+                };
+                container.appendChild(historyItem);
+            });
+        }
+
+        function clearHistory() {
+            if (confirm('Clear all search history?')) {
+                window.searchFunctions.clearSearchHistory();
+                document.getElementById('searchHistorySection').style.display = 'none';
+            }
+        }
+
+        function addToCart(productId) {
+            // Cart functionality to be implemented
+            alert(`Product ${productId} added to cart!`);
+        }
+
+        // Back to top
+        document.querySelector('.foot-panel1').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

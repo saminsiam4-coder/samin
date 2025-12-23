@@ -5,12 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon</title>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- CSS -->
     <link rel="stylesheet" href="/CSS/style.css">
+    <style>
+        .user-name-bold {
+            font-weight: 700;
+        }
+
+        #signedInView {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -27,111 +37,94 @@
                     <p class="add-second">Bangladesh</p>
                 </div>
             </div>
-
-            <div class="nav-search">
-               <!-- <select class="search-select">
-                    <option selected="selected">All</option>
-                    <option>Arts &amp; Crafts</option>
-                    <option>Automotive</option>
-                    <option>Baby</option>
-                    <option>Beauty &amp; Personal Care</option>
-                    <option>Books</option>
-                    <option>Boys' Fashion</option>
-                    <option>Computers</option>
-                    <option>Deals</option>
-                    <option>Digital Music</option>
-                    <option>Electronics</option>
-                    <option>Girls' Fashion</option>
-                    <option>Health &amp; Household</option>
-                    <option>Home &amp; Kitchen</option>
-                    <option>Industrial &amp; Scientific</option>
-                    <option>Kindle Store</option>
-                    <option>Luggage</option>
-                    <option>Men's Fashion</option>
-                    <option>Movies &amp; TV</option>
-                    <option>Music, CDs &amp; Vinyl</option>
-                    <option>Pet Supplies</option>
-                    <option>Prime Video</option>
-                    <option>Software</option>
-                    <option>Sports &amp; Outdoors</option>
-                    <option>Tools &amp; Home Improvement</option>
-                    <option>Toys &amp; Games</option>
-                    <option>Video Games</option>
-                    <option>Women's Fashion</option>
-                </select>-->
-                <input class="search-input" type="text" placeholder="Search....">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            </div>
-
-
-<div class="nav-language">
-    <select class="language-select">
-        <option selected>English - EN</option>
-        <option>español - ES</option>
-        <option>العربية - AR</option>
-        <option>Deutsch - DE</option>
-        <option>עברית - HE</option>
-        <option>한국어 - KO</option>
-        <option>português - PT</option>
-        <option>中文 (简体) - ZH</option>
-        <option>中文 (繁體) - ZH</option>
-    </select>
-    <i class="fa-solid fa-globe"></i>
-</div>
-
-
-<div class="nav-signin">
-    <p><span>Hello, sign in</span></p>
-    <p class="nav-second">
-        Account & Lists
-        <i class="fa-sharp fa-solid fa-circle-chevron-down"></i>
-    </p>
-
-    <!-- DROPDOWN MENU -->
-    <div class="signin-dropdown">
-        <button class="signin-btn" onclick="window.location.href='../HTML/signin.html'">
-    Sign in
-         </button>
-
-        <p class="new-customer">New customer? <a href="#">Start here.</a></p>
-
-        <div class="dropdown-sections">
-            <div class="section">
-                <h4>Your Lists</h4>
-                <a href="#">Create a List</a>
-                <a href="#">Find a List or Registry</a>
-            </div>
-
-            <div class="section">
-                <h4>Your Account</h4>
-                <a href="#">Account</a>
-                <a href="#">Orders</a>
-                <a href="#">Recommendations</a>
-                <a href="#">Browsing History</a>
-                <a href="#">Your Shopping preferences</a>
-                <a href="#">Watchlist</a>
-                <a href="#">Video Purchases & Rentals</a>
-                <a href="#">Kindle Unlimited</a>
-                <a href="#">Content & Devices</a>
-                <a href="#">Subscribe & Save Items</a>
-                <a href="#">Memberships & Subscriptions</a>
-                <a href="#">Music Library</a>
-            </div>
-        </div>
+<div class="nav-search">
+    <input 
+        class="search-input"
+        type="text"
+        id="searchInput"
+        placeholder="Search products..."
+        oninput="liveSearch()" 
+    />
+    <div class="search-icon-container" onclick="performManualSearch()" style="background-color: #febd69; padding: 10px; cursor: pointer;">
+        <i class="fa-solid fa-magnifying-glass"></i>
     </div>
 </div>
 
-            <div>
-                <a href = '../HTML/signin.html'><p class="nav-second"><span>Returns</span></p>
+            <div class="nav-language">
+                <select class="language-select">
+                    <option selected>English - EN</option>
+                    <option>español - ES</option>
+                    <option>العربية - AR</option>
+                    <option>Deutsch - DE</option>
+                    <option>עברית - HE</option>
+                    <option>한국어 - KO</option>
+                    <option>português - PT</option>
+                    <option>中文 (简体) - ZH</option>
+                    <option>中文 (繁體) - ZH</option>
+                </select>
+                <i class="fa-solid fa-globe"></i>
+            </div>
+
+            <div class="nav-signin">
+                <p><span id="nav-greeting">Hello, sign in</span></p>
                 <p class="nav-second">
-                    & Orders
+                    Account & Lists
                     <i class="fa-sharp fa-solid fa-circle-chevron-down"></i>
                 </p>
+
+                <div class="signin-dropdown">
+                    <div id="signedOutView">
+                        <button class="signin-btn" onclick="window.location.href='../HTML/signin.html'">
+                            Sign in
+                        </button>
+                        <p class="new-customer">New customer? <a href="#">Start here.</a></p>
+                    </div>
+
+                    <div id="signedInView" style="display: none;">
+                        <p style="margin-bottom: 10px; font-size: 13px;">Manage Your Account</p>
+                        <button class="signin-btn" onclick="handleSignOut()">
+                            Sign Out
+                        </button>
+                    </div>
+
+                    <div class="dropdown-sections">
+                        <div class="section">
+                            <h4>Your Lists</h4>
+                            <a href="#">Create a List</a>
+                            <a href="#">Find a List or Registry</a>
+                        </div>
+
+                        <div class="section">
+                            <h4>Your Account</h4>
+                            <a href="#">Account</a>
+                            <a href="#">Orders</a>
+                            <a href="#">Recommendations</a>
+                            <a href="#">Browsing History</a>
+                            <a href="#">Your Shopping preferences</a>
+                            <a href="#">Watchlist</a>
+                            <a href="#">Video Purchases & Rentals</a>
+                            <a href="#">Kindle Unlimited</a>
+                            <a href="#">Content & Devices</a>
+                            <a href="#">Subscribe & Save Items</a>
+                            <a href="#">Memberships & Subscriptions</a>
+                            <a href="#">Music Library</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <a href='../HTML/signin.html'>
+                    <p class="nav-second"><span>Returns</span></p>
+                    <p class="nav-second">
+                        & Orders
+                        <i class="fa-sharp fa-solid fa-circle-chevron-down"></i>
+                    </p>
                 </a>
             </div>
 
             <div class="nav-cart">
-                <i class="fa-solid fa-cart-shopping"></i> 
+                <i class="fa-solid fa-cart-shopping"></i>
                 Cart
             </div>
         </div>
@@ -142,144 +135,123 @@
                 All
             </div>
             <div class="panel-options">
-              <!--  <p>Today's Deals</p>-->
                 <p>Top Deals</p>
-
-
             </div>
         </div>
     </header>
 
     <div class="hero-section">
         <div class="hero-msg">
-            <p>You are on amazon.com. You can also shop on Amazon  for millions of products with fast local
-                delivery. </p>
+            <p>You are on amazon.com. You can also shop on Amazon for millions of products with fast local delivery.</p>
         </div>
     </div>
 
+    <!-- Search Results Container -->
+    <div id="searchResults" class="search-results"></div>
+
     <div class="shop-section">
         <div class="box1 box">
-            <div class="box-content"><a class="Ele" href = '../HTML/Clothes.html'>
-                <h2>Clothes</h2>
-                <div class="box-img" style="background-image: url('/Images/box1_image.jpg');"></div>
-                <p>See More</p></a>
+            <div class="box-content"><a class="Ele" href='../HTML/Clothes.html'>
+                    <h2>Clothes</h2>
+                    <div class="box-img" style="background-image: url('/Images/box1_image.jpg');"></div>
+                    <p>See More</p>
+                </a>
             </div>
         </div>
         <div class="box2 box">
             <div class="box-content">
-                <a class="Ele" href = '../HTML/Health.html'>
-                
-                <h2>Health & Personal Care</h2>
-                <div class="box-img" style="background-image: url('/Images/box2_image.jpg');"></div>
-                <p>See More</p></a>
+                <a class="Ele" href='../HTML/Health.html'>
+                    <h2>Health & Personal Care</h2>
+                    <div class="box-img" style="background-image: url('/Images/box2_image.jpg');"></div>
+                    <p>See More</p>
+                </a>
             </div>
         </div>
         <div class="box3 box">
             <div class="box-content">
-                <a class="Ele" href = '../HTML/Furniture.html'>
-                <h2>Furniture</h2>
-                <div class="box-img" style="background-image: url('/Images/box3_image.jpg');"></div>
-                <p>See More</p>
-            </a>
+                <a class="Ele" href='../HTML/Furniture.html'>
+                    <h2>Furniture</h2>
+                    <div class="box-img" style="background-image: url('/Images/box3_image.jpg');"></div>
+                    <p>See More</p>
+                </a>
             </div>
         </div>
         <div class="box4 box">
             <div class="box-content">
-                <a class="Ele" href = '../HTML/Electronics.html'>
-                <h2>Electronics</h2>
-                <div class="box-img" style="background-image: url('/Images/box4_image.jpg');"></div>
-                <p>See More</p></a>
+                <a class="Ele" href='../HTML/Electronics.html'>
+                    <h2>Electronics</h2>
+                    <div class="box-img" style="background-image: url('/Images/box4_image.jpg');"></div>
+                    <p>See More</p>
+                </a>
             </div>
         </div>
         <div class="box1 box">
             <div class="box-content">
-                <a class="Ele" href = '../HTML/Beauty.html'>
-                <h2>Beauty Pics</h2>
-                <div class="box-img" style="background-image: url('/Images/box5_image.jpg');"></div>
-                <p>See More</p></a>
+                <a class="Ele" href='../HTML/Beauty.html'>
+                    <h2>Beauty Pics</h2>
+                    <div class="box-img" style="background-image: url('/Images/box5_image.jpg');"></div>
+                    <p>See More</p>
+                </a>
             </div>
         </div>
         <div class="box2 box">
             <div class="box-content">
-                <a class="Ele" href = '../HTML/pet.html'>
-                <h2>Pet Care</h2>
-                <div class="box-img" style="background-image: url('/Images/box6_image.jpg');"></div>
-                <p>See More</p></a>
+                <a class="Ele" href='../HTML/pet.html'>
+                    <h2>Pet Care</h2>
+                    <div class="box-img" style="background-image: url('/Images/box6_image.jpg');"></div>
+                    <p>See More</p>
+                </a>
             </div>
         </div>
         <div class="box3 box">
             <div class="box-content">
-                <a class="Ele" href = '../HTML/Toys.html'>
-                <h2>New Arrival in Toys</h2>
-                <div class="box-img" style="background-image: url('/Images/box7_image.jpg');"></div>
-                <p>See More</p></a>
+                <a class="Ele" href='../HTML/Toys.html'>
+                    <h2>New Arrival in Toys</h2>
+                    <div class="box-img" style="background-image: url('/Images/box7_image.jpg');"></div>
+                    <p>See More</p>
+                </a>
             </div>
         </div>
         <div class="box4 box">
             <div class="box-content">
-                <a class="Ele" href = '../HTML/Trends.html'>
-                <h2>Discover Fashion Trends</h2>
-                <div class="box-img" style="background-image: url('/Images/box8_image.jpg');"></div>
-                <p>See More</p></a>
+                <a class="Ele" href='../HTML/Trends.html'>
+                    <h2>Discover Fashion Trends</h2>
+                    <div class="box-img" style="background-image: url('/Images/box8_image.jpg');"></div>
+                    <p>See More</p>
+                </a>
             </div>
         </div>
     </div>
 
     <footer>
-        <div class="foot-panel1">
-            Back to Top
-        </div>
-
+        <div class="foot-panel1">Back to Top</div>
         <div class="foot-panel2">
             <ul>
                 <li>Get to Know Us</li>
                 <li><a href="#">Careers</a></li>
                 <li><a href="#">Amazon Newsletter</a></li>
                 <li><a href="#">About Amazon</a></li>
-                <li><a href="#">Accessibility</a></li>
-                <li><a href="#">Sustainability</a></li>
-                <li><a href="#">Press Center</a></li>
-                <li><a href="#">Investor Relations</a></li>
-                <li><a href="#">Amazon Devices</a></li>
-                <li><a href="#">Amazon Science</a></li>
             </ul>
             <ul>
                 <li>Make Money with Us</li>
                 <li><a href="#">Sell products on Amazon</a></li>
                 <li><a href="#">Sell on Amazon Business</a></li>
-                <li><a href="#">Sell apps on Amazon</a></li>
-                <li><a href="#">Become an Affiliate</a></li>
-                <li><a href="#">Advertise Your Products</a></li>
-                <li><a href="#">Self-Publish with Us</a></li>
-                <li><a href="#">Host an Amazon Hub</a></li>
-                <li><a href="#">See More Make Money with Us</a></li>
             </ul>
             <ul>
                 <li>Amazon Payment Products</li>
-                <li><a href="#">Amzon Business Card</a></li>
+                <li><a href="#">Amazon Business Card</a></li>
                 <li><a href="#">Shop with Points</a></li>
-                <li><a href="#">Reload Your Balance</a></li>
-                <li><a href="currencycon.html">Amazon Currency Converter</a></li>
             </ul>
             <ul>
                 <li>Let Us Help You</li>
                 <li><a href="#">Amazon and COVID-19</a></li>
                 <li><a href="#">Your Account</a></li>
-                <li><a href="#">Your Orders</a></li>
-                <li><a href="#">Shipping Rates & Policies</a></li>
-                <li><a href="#">Return & Replacements</a></li>
-                <li><a href="#">Manage Your Content and Devices</a></li>
-                <li><a href="#">Amazon Assistant</a></li>
                 <li><a href="#">Help</a></li>
             </ul>
         </div>
-
         <div class="foot-panel3">
-            <div class="logo">
-
-            </div>
+            <div class="logo"></div>
         </div>
-
         <div class="foot-panel4">
             <div class="pages">
                 <a href="#">Conditions of Use</a>
@@ -292,80 +264,205 @@
         </div>
     </footer>
 
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- Sidebar Menu -->
-<div class="sidebar-menu" id="sidebarMenu">
-    <div class="sidebar-header">
-        <i class="fa-solid fa-user-circle"></i>
-        Hello, Sign in
-        <button class="close-btn" id="closeSidebar">&times;</button>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <i class="fa-solid fa-user-circle"></i>
+            <span id="sidebar-greeting">Hello, Sign in</span>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title"><a href="privacy.html">Privacy Notice</a></div>
+            <div class="sidebar-item"><a href="signin.html">Your Account</a></div>
+            <div class="sidebar-item" id="sidebar-signin-link"><a href="signin.html">Sign in</a></div>
+        </div>
     </div>
 
-    <div class="sidebar-section">
-        <div class="sidebar-title"><a href="privacy.html">Privacy Notice</a></div>
-        <div class="sidebar-item"><a href="signin.html">Your Account</a></div>
-        <div class="sidebar-item"><a href="signin.html">Sign in</a></div>
-    </div>
-</div>
+    <script>
+    
+        // ========================================
+        // 1. USER LOGIN CHECK LOGIC
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            checkUserLogin();
+        });
 
+        function checkUserLogin() {
+            const userStr = localStorage.getItem('currentUser');
+            const simpleName = localStorage.getItem('first_name');
 
+            let displayName = null;
 
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    displayName = user.first_name || user.email || 'Customer';
+                } catch (e) {
+                    console.error("Error parsing user data");
+                }
+            } else if (simpleName) {
+                displayName = simpleName;
+            }
 
+            if (displayName) {
+                console.log("User found:", displayName);
 
+                const navGreeting = document.getElementById('nav-greeting');
+                if (navGreeting) {
+                    navGreeting.innerHTML = `Hello, <span class="user-name-bold">${displayName}</span>`;
+                }
 
-<script>
-// Sidebar Menu JavaScript
-(function() {
-    // Wait for DOM to be fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get elements
-        const panelAlt = document.querySelector('.panel-alt');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const sidebarMenu = document.getElementById('sidebarMenu');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
+                const signedOutView = document.getElementById('signedOutView');
+                const signedInView = document.getElementById('signedInView');
+                if (signedOutView && signedInView) {
+                    signedOutView.style.display = 'none';
+                    signedInView.style.display = 'block';
+                }
 
-        // Open sidebar function
-        function openSidebarMenu() {
-            sidebarMenu.classList.add('active');
-            sidebarOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+                const sidebarGreeting = document.getElementById('sidebar-greeting');
+                if (sidebarGreeting) {
+                    sidebarGreeting.textContent = `Hello, ${displayName}`;
+                }
+
+                const sidebarSignInLink = document.getElementById('sidebar-signin-link');
+                if (sidebarSignInLink) {
+                    sidebarSignInLink.innerHTML = `<a href="#" onclick="handleSignOut()">Sign Out</a>`;
+                }
+            } else {
+                console.log("No user logged in (Local Storage is empty)");
+            }
         }
 
-        // Close sidebar function
-        function closeSidebarMenu() {
-            sidebarMenu.classList.remove('active');
-            sidebarOverlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
+        // ========================================
+        // 2. SIGN OUT FUNCTION
+        // ========================================
+        function handleSignOut() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('first_name');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_id');
+            window.location.reload();
+        }
+// This allows users to press 'Enter' instead of clicking the button
+document.getElementById('searchInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        performManualSearch();
+    }
+});
+
+ // ========================================
+// 3. UPDATED SEARCH FUNCTIONALITY
+// ========================================
+let searchTimer = null;
+
+// This triggers when you click the magnifying glass button
+function performManualSearch() {
+    const query = document.getElementById('searchInput').value.trim();
+    if (query) {
+        executeSearch(query);
+    }
+}
+
+// This triggers as you type
+function liveSearch() {
+    const query = document.getElementById('searchInput').value.trim();
+    const resultsDiv = document.getElementById('searchResults');
+
+    clearTimeout(searchTimer);
+
+    if (query.length === 0) {
+        resultsDiv.innerHTML = '';
+        return;
+    }
+
+    searchTimer = setTimeout(() => {
+        executeSearch(query);
+    }, 300);
+}
+
+// THE NEW CORE SEARCH LOGIC (Code No. 4)
+async function executeSearch(query) {
+    const resultsDiv = document.getElementById('searchResults');
+    try {
+        // Calls your new Restaurant-style logic on Port 5500
+        const response = await fetch(`http://localhost:5500/api/products/search?q=${encodeURIComponent(query)}`);
+        const data = await response.json();
+
+        resultsDiv.innerHTML = '';
+
+        // Check for the "message" your controller sends when nothing is found
+        if (data.message) {
+            resultsDiv.innerHTML = `<p style="padding:20px; color: #555; text-align: center;">${data.message}</p>`;
+            return;
         }
 
-        // Event listeners
-        if (panelAlt) {
-            panelAlt.addEventListener('click', openSidebarMenu);
-        }
-
-        if (closeSidebar) {
-            closeSidebar.addEventListener('click', closeSidebarMenu);
-        }
-
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', closeSidebarMenu);
-        }
-
-        // Smooth scroll to top for footer
-        const footPanel1 = document.querySelector('.foot-panel1');
-        if (footPanel1) {
-            footPanel1.addEventListener('click', function() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+        // Display the product cards if data is an array
+        if (Array.isArray(data)) {
+            data.forEach(product => {
+                resultsDiv.innerHTML += `
+                    <div class="product-card" style="border: 1px solid #ddd; padding: 10px; border-radius: 8px;">
+                        <img src="${product.image}" alt="${product.name}" style="width:100%; height:150px; object-fit:contain;">
+                        <h3 style="font-size: 16px; margin: 10px 0;">${product.name}</h3>
+                        <p style="color: #565959; font-size: 12px;">${product.category}</p>
+                        <p style="font-weight: bold; color: #B12704;">৳${product.price}</p>
+                        <button class="signin-btn" style="width:100%; margin-top:10px;">Add to Cart</button>
+                    </div>
+                `;
             });
+            // Scroll to view only if it's a manual search
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    });
-})();
-</script>
+    } catch (err) {
+        console.error('Search failed:', err);
+        resultsDiv.innerHTML = '<p style="padding:20px; color:red;">Connection error to server.</p>';
+    }
+}
+        // ========================================
+        // 4. SIDEBAR MENU LOGIC
+        // ========================================
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                const panelAlt = document.querySelector('.panel-alt');
+                const closeSidebar = document.getElementById('closeSidebar');
+                const sidebarMenu = document.getElementById('sidebarMenu');
+                const sidebarOverlay = document.getElementById('sidebarOverlay');
 
+                function openSidebarMenu() {
+                    sidebarMenu.classList.add('active');
+                    sidebarOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function closeSidebarMenu() {
+                    sidebarMenu.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+
+                if (panelAlt) {
+                    panelAlt.addEventListener('click', openSidebarMenu);
+                }
+                if (closeSidebar) {
+                    closeSidebar.addEventListener('click', closeSidebarMenu);
+                }
+                if (sidebarOverlay) {
+                    sidebarOverlay.addEventListener('click', closeSidebarMenu);
+                }
+
+                // Back to Top functionality
+                const footPanel1 = document.querySelector('.foot-panel1');
+                if (footPanel1) {
+                    footPanel1.addEventListener('click', function() {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    });
+                }
+            });
+        })();
+    </script>
 </body>
-
 </html>
