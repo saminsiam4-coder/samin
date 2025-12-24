@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Debug - Amazon Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #252526;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            color: #4ec9b0;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .section {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007acc;
+        }
+
+        .section h2 {
+            color: #569cd6;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .info-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #3e3e3e;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #ce9178;
+            min-width: 200px;
+            font-weight: bold;
+        }
+
+        .value {
+            color: #4ec9b0;
+            word-break: break-all;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-success {
+            background: #107c10;
+            color: white;
+        }
+
+        .status-error {
+            background: #e81123;
+            color: white;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: #0e639c;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e81123;
+            color: white;
+        }
+
+        .btn-success {
+            background: #107c10;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+
+        .warning {
+            background: #433007;
+            border: 1px solid #ce9178;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #ce9178;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Authentication Debug Tool</h1>
+
+        <div id="statusSection" class="section">
+            <h2>🚦 Authentication Status</h2>
+            <div id="authStatus"></div>
+        </div>
+
+        <div class="section">
+            <h2>📦 LocalStorage Data</h2>
+            <div id="localStorageData"></div>
+            <div style="margin-top: 20px;">
+                <button class="btn btn-danger" onclick="clearAuth()">🗑️ Clear All Auth Data</button>
+                <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Test API Endpoints</h2>
+            <button class="btn btn-success" onclick="testProfile()">Test Profile API</button>
+            <button class="btn btn-success" onclick="testCart()">Test Cart API</button>
+            <button class="btn btn-success" onclick="testCartCount()">Test Cart Count</button>
+            <div id="apiResults" class="code-block" style="margin-top: 15px; display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Quick Fixes</h2>
+            <button class="btn btn-primary" onclick="createTestAuth()">Create Test Auth Data</button>
+            <button class="btn btn-primary" onclick="window.location.href='signin.html'">Go to Sign In</button>
+            <button class="btn btn-primary" onclick="window.location.href='index.html'">Go to Homepage</button>
+        </div>
+    </div>
+
+    <script>
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshData();
+        });
+
+        function refreshData() {
+            checkAuthStatus();
+            displayLocalStorage();
+        }
+
+        function checkAuthStatus() {
+            const userId = localStorage.getItem('user_id');
+            const firstName = localStorage.getItem('first_name');
+            const token = localStorage.getItem('token');
+            const currentUser = localStorage.getItem('currentUser');
+
+            const statusDiv = document.getElementById('authStatus');
+            
+            if (userId) {
+                statusDiv.innerHTML = `
+                    <div class="info-row">
+                        <span class="label">Status:</span>
+                        <span class="value"><span class="status-badge status-success">✓ AUTHENTICATED</span></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">User ID:</span>
+                        <span class="value">${userId}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Name:</span>
+                        <span class="value">${firstName || 'Not set'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Has Token:</span>
+                        <span class="value">${token ? 'Yes ✓' : 'No ✗'}</span>
+                    </div>
+                `;
+            } else {
+                statusDiv.innerHTML = `
+                    <div class="warning">
+                        <strong>⚠️ NOT AUTHENTICATED</strong><br>
+                        No user_id found in localStorage. You need to sign in first.
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Status:</span>
+                        <span class="value"><span class="status-badge status-error">✗ NOT SIGNED IN</span></span>
+                    </div>
+                `;
+            }
+        }
+
+        function displayLocalStorage() {
+            const div = document.getElementById('localStorageData');
+            const keys = ['user_id', 'first_name', 'token', 'currentUser'];
+            
+            let html = '';
+            keys.forEach(key => {
+                const value = localStorage.getItem(key);
+                html += `
+                    <div class="info-row">
+                        <span class="label">${key}:</span>
+                        <span class="value">${value || '<span style="color: #e81123;">null</span>'}</span>
+                    </div>
+                `;
+            });
+
+            div.innerHTML = html;
+        }
+
+        function clearAuth() {
+            if (confirm('Clear all authentication data?')) {
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('first_name');
+                localStorage.removeItem('token');
+                localStorage.removeItem('currentUser');
+                console.log('✅ All auth data cleared');
+                refreshData();
+                alert('✓ Authentication data cleared! You are now signed out.');
+            }
+        }
+
+        async function testProfile() {
+            const userId = localStorage.getItem('user_id');
+            const resultsDiv = document.getElementById('apiResults');
+            
+            if (!userId) {
+                resultsDiv.style.display = 'block';
+                resultsDiv.innerHTML = '<span style="color: #e81123;">❌ Error: No user_id in localStorage. Please sign in first.</span>';
+                return;
+            }
+
+            try {
+                resultsDiv.style.display = 'block';
+                resultsDiv.innerHTML = '<span style="color: #ce9178;">⏳ Testing profile endpoint...</span>';
+
+                const response = await fetch('http://localhost:5500/api/auth/profile', {
+                    headers: {
+                        'user-id': userId
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultsDiv.innerHTML = `
+                        <span style="color: #4ec9b0;">✅ Profile API Test: SUCCESS</span><br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <span style="color: #e81123;">❌ Profile API Test: FAILED</span><br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<span style="color: #e81123;">❌ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testCart() {
+            const userId = localStorage.getItem('user_id');
+            const resultsDiv = document.getElementById('apiResults');
+            
+            if (!userId) {
+                resultsDiv.style.display = 'block';
+                resultsDiv.innerHTML = '<span style="color: #e81123;">❌ Error: No user_id in localStorage</span>';
+                return;
+            }
+
+            try {
+                resultsDiv.style.display = 'block';
+                resultsDiv.innerHTML = '<span style="color: #ce9178;">⏳ Testing cart endpoint...</span>';
+
+                const response = await fetch('http://localhost:5500/api/cart', {
+                    headers: {
+                        'user-id': userId
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultsDiv.innerHTML = `
+                        <span style="color: #4ec9b0;">✅ Cart API Test: SUCCESS</span><br>
+                        <span>Items in cart: ${data.count}</span><br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <span style="color: #e81123;">❌ Cart API Test: FAILED</span><br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<span style="color: #e81123;">❌ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testCartCount() {
+            const userId = localStorage.getItem('user_id');
+            const resultsDiv = document.getElementById('apiResults');
+            
+            if (!userId) {
+                resultsDiv.style.display = 'block';
+                resultsDiv.innerHTML = '<span style="color: #e81123;">❌ Error: No user_id in localStorage</span>';
+                return;
+            }
+
+            try {
+                resultsDiv.style.display = 'block';
+                resultsDiv.innerHTML = '<span style="color: #ce9178;">⏳ Testing cart count...</span>';
+
+                const response = await fetch('http://localhost:5500/api/cart/count', {
+                    headers: {
+                        'user-id': userId
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultsDiv.innerHTML = `
+                        <span style="color: #4ec9b0;">✅ Cart Count API Test: SUCCESS</span><br>
+                        <span>Cart Count: ${data.count}</span>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `<span style="color: #e81123;">❌ Test FAILED</span>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<span style="color: #e81123;">❌ Error: ${error.message}</span>`;
+            }
+        }
+
+        function createTestAuth() {
+            const testUserId = prompt('Enter test user ID (default: 1):', '1');
+            if (testUserId) {
+                localStorage.setItem('user_id', testUserId);
+                localStorage.setItem('first_name', 'Test User');
+                localStorage.setItem('currentUser', JSON.stringify({
+                    user_id: testUserId,
+                    first_name: 'Test',
+                    last_name: 'User',
+                    email: 'test@example.com'
+                }));
+                refreshData();
+                alert('✓ Test authentication data created!');
+            }
+        }
+    </script>
+</body>
+</html>
