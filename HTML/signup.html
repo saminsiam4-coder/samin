@@ -3,164 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon Registration</title>
+    <title>Amazon - Create Account</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
+            background-color: #f3f3f3;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 20px;
             min-height: 100vh;
-        }
-
-        .logo {
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .logo-text {
-            font-size: 32px;
-            font-weight: bold;
-            color: #000;
-            text-decoration: none;
-            position: relative;
-        }
-
-        .logo-text::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            right: 0;
-            width: 40%;
-            height: 3px;
-            background-color: #ff9900;
-            border-radius: 2px;
+            padding: 20px;
         }
 
         .signup-container {
+            background: white;
+            max-width: 400px;
             width: 100%;
-            max-width: 350px;
-            border: 1px solid #ddd;
+            padding: 30px;
             border-radius: 8px;
-            padding: 20px 26px;
-            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        h1 {
-            font-size: 28px;
-            font-weight: 400;
+        .logo {
+            text-align: center;
             margin-bottom: 20px;
-            color: #111;
+        }
+
+        .logo h1 {
+            font-size: 32px;
+            color: #000;
+        }
+
+        .logo .smile {
+            color: #FF9900;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
         }
 
         label {
             display: block;
             font-size: 13px;
             font-weight: 700;
-            margin-bottom: 4px;
-            color: #111;
+            margin-bottom: 5px;
         }
 
         input[type="text"],
         input[type="email"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="tel"] {
             width: 100%;
-            padding: 8px 10px;
-            margin-bottom: 14px;
+            padding: 10px;
             border: 1px solid #a6a6a6;
             border-radius: 3px;
-            font-size: 13px;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            border-color: #e77600;
-            box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
-        }
-
-        input::placeholder {
-            color: #767676;
-        }
-
-        .info-text {
-            font-size: 12px;
-            color: #0f1111;
-            margin-top: -10px;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .info-icon {
-            color: #007185;
-            margin-right: 5px;
-            font-weight: bold;
             font-size: 14px;
+            transition: border 0.2s;
         }
 
-        /* --- NEW STYLES FOR MESSAGES --- */
-        .message-box {
-            font-size: 12px;
-            margin-bottom: 15px;
-            display: none; /* Hidden by default */
-            padding: 10px;
+        input:focus {
+            outline: none;
+            border-color: #e77600;
+            box-shadow: 0 0 3px 2px rgba(228,121,17,0.5);
+        }
+
+        .name-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .error-message {
+            background-color: #fff5f5;
+            border: 1px solid #d32f2f;
+            color: #d32f2f;
+            padding: 12px;
             border-radius: 4px;
-            line-height: 1.4;
-        }
-
-        .error-msg {
-            color: #ba0933;
-            border: 1px solid #ba0933;
-            background-color: #fff4f4;
-            display: flex;
-            align-items: center;
-        }
-        
-        .success-msg {
-            color: #007600;
-            border: 1px solid #007600;
-            background-color: #f4fff4;
-        }
-
-        .error-icon {
-            margin-right: 8px;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        /* ------------------------------- */
-
-        .signupBtn {
-            width: 100%;
-            padding: 8px;
-            background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
-            border: 1px solid #a88734;
-            border-radius: 3px;
+            margin-bottom: 15px;
             font-size: 13px;
-            cursor: pointer;
-            margin-bottom: 16px;
-            color: #111;
+            display: none;
         }
 
-        .signupBtn:hover {
-            background: linear-gradient(to bottom, #f5d78e, #edb933);
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background-color: #f0f9ff;
+            border: 1px solid #007185;
+            color: #007185;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .password-hint {
+            font-size: 12px;
+            color: #565959;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(to bottom,#f7dfa5,#f0c14b);
+            border: 1px solid #a88734;
+            padding: 10px;
+            border-radius: 3px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(to bottom,#f5d78e,#edb933);
+        }
+
+        .submit-btn:active {
+            background: #f0c14b;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .terms {
-            font-size: 12px;
+            font-size: 11px;
+            color: #565959;
+            margin-top: 15px;
             line-height: 1.5;
-            color: #111;
-            margin-bottom: 20px;
         }
 
         .terms a {
@@ -169,28 +159,24 @@
         }
 
         .terms a:hover {
-            color: #c45500;
             text-decoration: underline;
         }
 
         .divider {
-            margin: 20px 0;
             text-align: center;
-            position: relative;
-            border-top: 1px solid #e7e7e7;
+            margin: 20px 0;
+            color: #767676;
+            font-size: 13px;
         }
 
         .signin-link {
+            text-align: center;
             font-size: 13px;
-            color: #111;
-            margin-bottom: 8px;
-            margin-top: 20px;
         }
 
         .signin-link a {
             color: #0066c0;
             text-decoration: none;
-            margin-left: 5px;
         }
 
         .signin-link a:hover {
@@ -198,139 +184,230 @@
             text-decoration: underline;
         }
 
-        .arrow {
-            color: #0066c0;
-            margin-left: 3px;
+        .loading {
+            display: none;
+        }
+
+        .loading.show {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="logo">
-        <a href="#" class="logo-text">amazon</a>
-    </div>
-
     <div class="signup-container">
-        <h1>Create account</h1>
-
-        <label for="name">Your name</label>
-        <input type="text" id="first_name" placeholder="First and last name">
-
-        <label for="email">Mobile number or email</label>
-        <input type="text" id="email">
-
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="At least 6 characters">
-
-        <div class="info-text">
-            <span class="info-icon">i</span>
-            <span>Passwords must be at least 6 characters.</span>
+        <div class="logo">
+            <h1>amazon<span class="smile">⌣</span></h1>
         </div>
 
-        <div id="errorMessage" class="message-box error-msg">
-            <span class="error-icon">!</span>
-            <span id="errorText">Error message here</span>
-        </div>
-        <div id="successMessage" class="message-box success-msg">
-            Success message here
-        </div>
+        <h2>Create account</h2>
 
-        <button id="signupBtn" class="signupBtn">Continue</button>
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
 
-        <div class="terms">
-            By creating an account, you agree to Amazon's
-            <a href="conditionpage.html">Conditions of Use</a> and
-            <a href="privacy.html">Privacy Notice</a>.
-        </div>
+        <form id="signupForm">
+            <div class="name-group">
+                <div class="form-group">
+                    <label for="firstName">First name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+            </div>
 
-        <div class="divider"></div>
+            <div class="form-group">
+                <label for="email">Mobile number or email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone number (optional)</label>
+                <input type="tel" id="phone" name="phone" placeholder="+880 1XXX-XXXXXX">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required minlength="6">
+                <p class="password-hint">ⓘ Passwords must be at least 6 characters.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Re-enter password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="loading" id="loadingSpinner"></span>
+                <span id="btnText">Continue</span>
+            </button>
+
+            <p class="terms">
+                By creating an account, you agree to Amazon's 
+                <a href="#">Conditions of Use</a> and 
+                <a href="#">Privacy Notice</a>.
+            </p>
+        </form>
+
+        <div class="divider">────────────────</div>
 
         <div class="signin-link">
-            Already have an account?
-            <a href="signin.html">Sign-In<span class="arrow">›</span></a>
+            Already have an account? <a href="signin.html">Sign-In ›</a>
         </div>
     </div>
 
-<script>
-    // IMPORTANT: Check your Backend Port (e.g., 5500 or 3000)
-    const API_URL = 'http://localhost:5500'; 
+    <script>
+        const form = document.getElementById('signupForm');
+        const errorMsg = document.getElementById('errorMessage');
+        const successMsg = document.getElementById('successMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
 
-    document.getElementById('signupBtn').addEventListener('click', async () => {
-        // Get values
-        const name = document.getElementById('first_name').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        
-        // Get message containers
-        const errorMessage = document.getElementById('errorMessage');
-        const errorText = document.getElementById('errorText');
-        const successMessage = document.getElementById('successMessage');
-
-        // Helper to show errors
-        const showError = (msg) => {
-            if (errorMessage && errorText) {
-                errorText.textContent = msg;
-                errorMessage.style.display = 'flex'; // Use flex to align icon
-                successMessage.style.display = 'none';
-            } else {
-                alert(msg);
-            }
-        };
-
-        // Helper to show success
-        const showSuccess = (msg) => {
-            if (successMessage) {
-                successMessage.textContent = msg;
-                successMessage.style.display = 'block';
-                errorMessage.style.display = 'none';
-            } else {
-                alert(msg);
-            }
-        };
-
-        // Reset previous messages on click
-        if (errorMessage) errorMessage.style.display = 'none';
-        if (successMessage) successMessage.style.display = 'none';
-
-        // Validation
-        if (!first_name || !email || !password) {
-            showError('Enter your name, email, and password');
-            return;
+        // Show error message
+        function showError(message) {
+            errorMsg.textContent = message;
+            errorMsg.classList.add('show');
+            successMsg.classList.remove('show');
         }
 
-        try {
-            const response = await fetch(`${API_URL}/api/auth/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, password })
-            });
+        // Show success message
+        function showSuccess(message) {
+            successMsg.textContent = message;
+            successMsg.classList.add('show');
+            errorMsg.classList.remove('show');
+        }
 
-            const data = await response.json();
+        // Hide all messages
+        function hideMessages() {
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+        }
 
-            if (response.ok) {
-                showSuccess('Account created successfully! Redirecting...');
+        // Set loading state
+        function setLoading(isLoading) {
+            if (isLoading) {
+                submitBtn.disabled = true;
+                loadingSpinner.classList.add('show');
+                btnText.textContent = 'Creating account...';
+            } else {
+                submitBtn.disabled = false;
+                loadingSpinner.classList.remove('show');
+                btnText.textContent = 'Continue';
+            }
+        }
+
+        // Form submission
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideMessages();
+
+            // Get form values
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation
+            if (!firstName) {
+                showError('Please enter your first name.');
+                return;
+            }
+
+            if (!lastName) {
+                showError('Please enter your last name.');
+                return;
+            }
+
+            if (!email) {
+                showError('Please enter your email or mobile number.');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters long.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showError('Passwords do not match. Please try again.');
+                return;
+            }
+
+            // Prepare data for API
+            const userData = {
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                password: password,
+                phone: phone || null
+            };
+
+            console.log('📤 Sending signup data:', userData);
+
+            setLoading(true);
+
+            try {
+                // Call backend API
+                const response = await fetch('http://localhost:5500/api/auth/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const result = await response.json();
+                console.log('📥 Server response:', result);
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Signup failed');
+                }
+
+                // Success!
+                showSuccess('✓ Account created successfully! Redirecting to sign in...');
                 
-                // Redirect to Sign In page after 1.5 seconds
+                // Clear form
+                form.reset();
+
+                // Redirect to signin page after 2 seconds
                 setTimeout(() => {
-                    window.location.href = 'signin.html'; 
-                }, 1500);
-            } else {
-                showError(data.error || 'Registration failed');
+                    window.location.href = 'signin.html';
+                }, 2000);
+
+            } catch (error) {
+                console.error('❌ Signup error:', error);
+                showError('⚠ ' + error.message);
+            } finally {
+                setLoading(false);
             }
+        });
 
-        } catch (error) {
-            console.error('Error:', error);
-            showError(`Connection error. Is backend running on port 5500?`);
-        }
-    });
+        // Real-time password match validation
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
 
-    // Allow Enter key to submit
-    document.getElementById('password').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            document.getElementById('signupBtn').click();
-        }
-    });
-</script>
+            if (confirmPassword && password !== confirmPassword) {
+                this.style.borderColor = '#d32f2f';
+            } else {
+                this.style.borderColor = '#a6a6a6';
+            }
+        });
+    </script>
 </body>
 </html>

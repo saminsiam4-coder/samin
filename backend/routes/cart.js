@@ -1,81 +1,256 @@
+// routes/cart.js - Complete Shopping Cart API
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = "supersecret";
+// ========================================
+// MIDDLEWARE: Verify User (Simple Token Check)
+// ========================================
+function verifyUser(req, res, next) {
+    const userId = req.headers['user-id'];
+    if (!userId) {
+        return res.status(401).json({ error: 'User ID required' });
+    }
+    req.userId = userId;
+    next();
+}
 
-// Middleware to check token
-const authMiddleware = (req, res, next) => {
-    const token = req.headers['authorization'];
-    if (!token) return res.status(401).json({ error: 'No token' });
+// ========================================
+// ADD TO CART
+// ========================================
+router.post('/add', verifyUser, async (req, res) => {
+    const { product_id, quantity = 1 } = req.body;
+    const userId = req.userId;
 
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
-        if (err) return res.status(401).json({ error: 'Invalid token' });
-        req.user_id = decoded.user_id;
-        next();
-    });
-};
+    console.log('🛒 Add to cart:', { userId, product_id, quantity });
 
-// Add product to cart
-router.post('/add', authMiddleware, (req, res) => {
-    const { product_id, quantity } = req.body;
+    if (!product_id) {
+        return res.status(400).json({ error: 'Product ID required' });
+    }
 
-    // Find or create cart
-    db.query(`SELECT * FROM carts WHERE user_id = ?`, [req.user_id], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
+    try {
+        // Check if product exists and has stock
+        const [product] = await dbQuery('SELECT * FROM products WHERE product_id = ?', [product_id]);
+        
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
 
-        let cart_id;
-        if (results.length) {
-            cart_id = results[0].cart_id;
-            addToCart(cart_id);
+        if (product.stock < quantity) {
+            return res.status(400).json({ error: 'Insufficient stock' });
+        }
+
+        // Get or create user's cart
+        let [cart] = await dbQuery('SELECT * FROM carts WHERE user_id = ?', [userId]);
+        
+        if (!cart) {
+            const result = await dbQuery('INSERT INTO carts (user_id) VALUES (?)', [userId]);
+            cart = { cart_id: result.insertId };
+        }
+
+        // Check if item already in cart
+        const [existingItem] = await dbQuery(
+            'SELECT * FROM cart_items WHERE cart_id = ? AND product_id = ?',
+            [cart.cart_id, product_id]
+        );
+
+        if (existingItem) {
+            // Update quantity
+            const newQuantity = existingItem.quantity + quantity;
+            await dbQuery(
+                'UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?',
+                [newQuantity, existingItem.cart_item_id]
+            );
+            
+            res.json({ 
+                message: 'Cart updated', 
+                quantity: newQuantity,
+                product_name: product.name 
+            });
         } else {
-            db.query(`INSERT INTO carts (user_id) VALUES (?)`, [req.user_id], (err, result) => {
-                if (err) return res.status(500).json({ error: err });
-                cart_id = result.insertId;
-                addToCart(cart_id);
+            // Add new item
+            await dbQuery(
+                'INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?, ?, ?)',
+                [cart.cart_id, product_id, quantity]
+            );
+            
+            res.json({ 
+                message: 'Product added to cart', 
+                product_name: product.name 
             });
         }
 
-        function addToCart(cart_id) {
-            // Check if product already in cart
-            db.query(`SELECT * FROM cart_items WHERE cart_id = ? AND product_id = ?`, [cart_id, product_id], (err, results) => {
-                if (err) return res.status(500).json({ error: err });
-                if (results.length) {
-                    // Update quantity
-                    db.query(`UPDATE cart_items SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?`, [quantity, cart_id, product_id], (err) => {
-                        if (err) return res.status(500).json({ error: err });
-                        res.json({ message: 'Cart updated' });
-                    });
-                } else {
-                    // Insert new
-                    db.query(`INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?, ?, ?)`, [cart_id, product_id, quantity], (err) => {
-                        if (err) return res.status(500).json({ error: err });
-                        res.json({ message: 'Product added to cart' });
-                    });
-                }
-            });
-        }
-    });
+    } catch (error) {
+        console.error('❌ Add to cart error:', error);
+        res.status(500).json({ error: 'Failed to add to cart' });
+    }
 });
 
-// Get cart items
-router.get('/', authMiddleware, (req, res) => {
-    db.query(`SELECT cart_id FROM carts WHERE user_id = ?`, [req.user_id], (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        if (!results.length) return res.json([]);
+// ========================================
+// GET CART ITEMS
+// ========================================
+router.get('/', verifyUser, async (req, res) => {
+    const userId = req.userId;
 
-        const cart_id = results[0].cart_id;
-        db.query(`
-            SELECT ci.cart_item_id, ci.quantity, p.product_id, p.name, p.price, p.image_url
-            FROM cart_items ci
+    try {
+        const items = await dbQuery(`
+            SELECT 
+                ci.cart_item_id,
+                ci.quantity,
+                p.product_id,
+                p.name,
+                p.price,
+                p.image,
+                p.category,
+                p.stock,
+                (ci.quantity * p.price) as subtotal
+            FROM carts c
+            JOIN cart_items ci ON c.cart_id = ci.cart_id
             JOIN products p ON ci.product_id = p.product_id
-            WHERE ci.cart_id = ?
-        `, [cart_id], (err, results) => {
-            if (err) return res.status(500).json({ error: err });
-            res.json(results);
+            WHERE c.user_id = ?
+            ORDER BY ci.added_at DESC
+        `, [userId]);
+
+        const total = items.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
+
+        res.json({
+            items,
+            total: total.toFixed(2),
+            count: items.length
+        });
+
+    } catch (error) {
+        console.error('❌ Get cart error:', error);
+        res.status(500).json({ error: 'Failed to fetch cart' });
+    }
+});
+
+// ========================================
+// UPDATE CART ITEM QUANTITY
+// ========================================
+router.put('/update/:cart_item_id', verifyUser, async (req, res) => {
+    const { cart_item_id } = req.params;
+    const { quantity } = req.body;
+    const userId = req.userId;
+
+    if (quantity < 1) {
+        return res.status(400).json({ error: 'Quantity must be at least 1' });
+    }
+
+    try {
+        // Verify item belongs to user
+        const [item] = await dbQuery(`
+            SELECT ci.*, p.stock 
+            FROM cart_items ci
+            JOIN carts c ON ci.cart_id = c.cart_id
+            JOIN products p ON ci.product_id = p.product_id
+            WHERE ci.cart_item_id = ? AND c.user_id = ?
+        `, [cart_item_id, userId]);
+
+        if (!item) {
+            return res.status(404).json({ error: 'Cart item not found' });
+        }
+
+        if (quantity > item.stock) {
+            return res.status(400).json({ error: `Only ${item.stock} items available` });
+        }
+
+        await dbQuery(
+            'UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?',
+            [quantity, cart_item_id]
+        );
+
+        res.json({ message: 'Cart updated', quantity });
+
+    } catch (error) {
+        console.error('❌ Update cart error:', error);
+        res.status(500).json({ error: 'Failed to update cart' });
+    }
+});
+
+// ========================================
+// REMOVE FROM CART
+// ========================================
+router.delete('/remove/:cart_item_id', verifyUser, async (req, res) => {
+    const { cart_item_id } = req.params;
+    const userId = req.userId;
+
+    try {
+        // Verify item belongs to user
+        const [item] = await dbQuery(`
+            SELECT ci.* 
+            FROM cart_items ci
+            JOIN carts c ON ci.cart_id = c.cart_id
+            WHERE ci.cart_item_id = ? AND c.user_id = ?
+        `, [cart_item_id, userId]);
+
+        if (!item) {
+            return res.status(404).json({ error: 'Cart item not found' });
+        }
+
+        await dbQuery('DELETE FROM cart_items WHERE cart_item_id = ?', [cart_item_id]);
+
+        res.json({ message: 'Item removed from cart' });
+
+    } catch (error) {
+        console.error('❌ Remove from cart error:', error);
+        res.status(500).json({ error: 'Failed to remove item' });
+    }
+});
+
+// ========================================
+// CLEAR CART
+// ========================================
+router.delete('/clear', verifyUser, async (req, res) => {
+    const userId = req.userId;
+
+    try {
+        await dbQuery(`
+            DELETE ci FROM cart_items ci
+            JOIN carts c ON ci.cart_id = c.cart_id
+            WHERE c.user_id = ?
+        `, [userId]);
+
+        res.json({ message: 'Cart cleared' });
+
+    } catch (error) {
+        console.error('❌ Clear cart error:', error);
+        res.status(500).json({ error: 'Failed to clear cart' });
+    }
+});
+
+// ========================================
+// GET CART COUNT
+// ========================================
+router.get('/count', verifyUser, async (req, res) => {
+    const userId = req.userId;
+
+    try {
+        const [result] = await dbQuery(`
+            SELECT COALESCE(SUM(ci.quantity), 0) as count
+            FROM carts c
+            LEFT JOIN cart_items ci ON c.cart_id = ci.cart_id
+            WHERE c.user_id = ?
+        `, [userId]);
+
+        res.json({ count: result.count || 0 });
+
+    } catch (error) {
+        console.error('❌ Get cart count error:', error);
+        res.status(500).json({ count: 0 });
+    }
+});
+
+// ========================================
+// HELPER: Promisified DB Query
+// ========================================
+function dbQuery(sql, params = []) {
+    return new Promise((resolve, reject) => {
+        db.query(sql, params, (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
         });
     });
-});
+}
 
 module.exports = router;

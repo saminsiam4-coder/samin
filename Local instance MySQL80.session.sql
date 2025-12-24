@@ -1,8 +1,7 @@
 -- ============================================
--- Amazon Clone Database Schema
+-- Amazon Clone Database Schema (FIXED)
 -- ============================================
 
--- Drop database if exists and create fresh
 DROP DATABASE IF EXISTS amazon_clone;
 CREATE DATABASE amazon_clone;
 USE amazon_clone;
@@ -23,22 +22,19 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLE: products
+-- TABLE: products (FIXED - using product_id)
 -- ============================================
 CREATE TABLE products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
     category VARCHAR(100) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
-    stock INT DEFAULT 0,
+    stock INT NOT NULL,
     image VARCHAR(255),
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_category (category),
     INDEX idx_name (name),
-    CHECK (price >= 0),
-    CHECK (stock >= 0)
+    INDEX idx_category (category)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
@@ -68,7 +64,7 @@ CREATE TABLE carts (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLE: cart_items
+-- TABLE: cart_items (FIXED)
 -- ============================================
 CREATE TABLE cart_items (
     cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,7 +80,7 @@ CREATE TABLE cart_items (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLE: orders (Optional - for future use)
+-- TABLE: orders
 -- ============================================
 CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -100,7 +96,7 @@ CREATE TABLE orders (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLE: order_items (Optional - for future use)
+-- TABLE: order_items
 -- ============================================
 CREATE TABLE order_items (
     order_item_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -177,15 +173,6 @@ INSERT INTO products (name, category, price, stock, image, description) VALUES
 -- VERIFICATION QUERIES
 -- ============================================
 
--- Check total products inserted
--- SELECT COUNT(*) as total_products FROM products;
-
--- Check products by category
--- SELECT category, COUNT(*) as product_count FROM products GROUP BY category;
-
--- Check all tables
--- SHOW TABLES;
-
--- ============================================
--- END OF SCHEMA
--- ============================================
+SELECT 'Database setup complete!' as Status;
+SELECT COUNT(*) as total_products FROM products;
+SELECT category, COUNT(*) as product_count FROM products GROUP BY category;

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Amazon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f3f3f3;
+        }
+
+        .navbar {
+            background-color: #131921;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .back-btn {
+            background: none;
+            border: 1px solid #fff;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: #374151;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .cart-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h1 {
+            font-size: 28px;
+        }
+
+        .clear-cart-btn {
+            background: white;
+            border: 1px solid #d5d9d9;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #c7511f;
+        }
+
+        .clear-cart-btn:hover {
+            background: #f7f8f8;
+        }
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+        }
+
+        .cart-items {
+            background: white;
+            border-radius: 8px;
+        }
+
+        .cart-item {
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            display: grid;
+            grid-template-columns: 150px 1fr auto;
+            gap: 20px;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .item-details h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #007185;
+            cursor: pointer;
+        }
+
+        .item-details h3:hover {
+            color: #c45500;
+            text-decoration: underline;
+        }
+
+        .item-category {
+            color: #565959;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .item-price {
+            font-size: 18px;
+            color: #B12704;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .item-stock {
+            color: #007600;
+            font-size: 12px;
+        }
+
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #d5d9d9;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        .qty-btn {
+            background: #f0f2f2;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .qty-btn:hover {
+            background: #e3e6e6;
+        }
+
+        .qty-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #c7511f;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .remove-btn:hover {
+            text-decoration: underline;
+        }
+
+        .cart-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #B12704;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(to bottom,#f7dfa5,#f0c14b);
+            border: 1px solid #a88734;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .checkout-btn:hover {
+            background: linear-gradient(to bottom,#f5d78e,#edb933);
+        }
+
+        .empty-cart {
+            background: white;
+            padding: 60px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .empty-cart i {
+            font-size: 80px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h2 {
+            margin-bottom: 15px;
+        }
+
+        .shop-now-btn {
+            background: linear-gradient(to bottom,#f7dfa5,#f0c14b);
+            border: 1px solid #a88734;
+            padding: 10px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #565959;
+        }
+
+        @media (max-width: 768px) {
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-item {
+                grid-template-columns: 100px 1fr;
+            }
+
+            .item-actions {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-left">
+            <div class="logo" onclick="window.location.href='index.html'">amazon</div>
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-left"></i> Continue Shopping
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="cartContent"></div>
+    </div>
+
+    <script>
+        // ========================================
+        // GLOBAL STATE
+        // ========================================
+        let cartData = { items: [], total: 0, count: 0 };
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCart();
+        });
+
+        // ========================================
+        // LOAD CART
+        // ========================================
+        async function loadCart() {
+            const userId = localStorage.getItem('user_id');
+            const contentDiv = document.getElementById('cartContent');
+
+            if (!userId) {
+                contentDiv.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <h2>Your cart is empty</h2>
+                        <p>Please sign in to view your cart</p>
+                        <button class="shop-now-btn" onclick="window.location.href='signin.html'">
+                            Sign In
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            contentDiv.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading cart...</div>';
+
+            try {
+                const response = await fetch('http://localhost:5500/api/cart', {
+                    headers: { 'user-id': userId }
+                });
+
+                if (!response.ok) throw new Error('Failed to load cart');
+
+                cartData = await response.json();
+                renderCart();
+
+            } catch (error) {
+                console.error('❌ Load cart error:', error);
+                contentDiv.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        <h2>Error loading cart</h2>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ========================================
+        // RENDER CART
+        // ========================================
+        function renderCart() {
+            const contentDiv = document.getElementById('cartContent');
+
+            if (cartData.items.length === 0) {
+                contentDiv.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <h2>Your Amazon Cart is empty</h2>
+                        <p>Start adding items to your cart!</p>
+                        <button class="shop-now-btn" onclick="window.location.href='index.html'">
+                            Shop Now
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            let cartHTML = `
+                <div class="cart-header">
+                    <h1>Shopping Cart (${cartData.count} items)</h1>
+                    <button class="clear-cart-btn" onclick="clearCart()">
+                        <i class="fa-solid fa-trash"></i> Clear Cart
+                    </button>
+                </div>
+                
+                <div class="cart-layout">
+                    <div class="cart-items">
+            `;
+
+            cartData.items.forEach(item => {
+                cartHTML += `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}" class="item-image" onerror="this.src='/Images/placeholder.jpg'">
+                        
+                        <div class="item-details">
+                            <h3>${item.name}</h3>
+                            <p class="item-category">${item.category}</p>
+                            <p class="item-price">৳${item.price}</p>
+                            <p class="item-stock">
+                                ${item.stock > 0 ? `In Stock (${item.stock} available)` : 'Out of Stock'}
+                            </p>
+                            <p style="color: #565959; font-size: 14px; margin-top: 8px;">
+                                Subtotal: <strong>৳${item.subtotal}</strong>
+                            </p>
+                        </div>
+
+                        <div class="item-actions">
+                            <div class="quantity-control">
+                                <button class="qty-btn" onclick="updateQuantity(${item.cart_item_id}, ${item.quantity - 1})">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <span class="qty-value">${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity(${item.cart_item_id}, ${item.quantity + 1})" ${item.quantity >= item.stock ? 'disabled' : ''}>
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                            <button class="remove-btn" onclick="removeItem(${item.cart_item_id})">
+                                <i class="fa-solid fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartHTML += `
+                    </div>
+                    
+                    <div class="cart-summary">
+                        <h2 style="margin-bottom: 15px;">Order Summary</h2>
+                        <div class="summary-row">
+                            <span>Items (${cartData.count}):</span>
+                            <span>৳${cartData.total}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping:</span>
+                            <span style="color: #007600;">FREE</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-total">Order Total:</span>
+                            <span class="summary-total">৳${cartData.total}</span>
+                        </div>
+                        <button class="checkout-btn" onclick="proceedToCheckout()">
+                            <i class="fa-solid fa-lock"></i> Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            contentDiv.innerHTML = cartHTML;
+        }
+
+        // ========================================
+        // UPDATE QUANTITY
+        // ========================================
+        async function updateQuantity(cartItemId, newQuantity) {
+            if (newQuantity < 1) {
+                removeItem(cartItemId);
+                return;
+            }
+
+            const userId = localStorage.getItem('user_id');
+
+            try {
+                const response = await fetch(`http://localhost:5500/api/cart/update/${cartItemId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'user-id': userId
+                    },
+                    body: JSON.stringify({ quantity: newQuantity })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error);
+                }
+
+                // Reload cart
+                await loadCart();
+
+            } catch (error) {
+                console.error('❌ Update quantity error:', error);
+                alert(error.message);
+            }
+        }
+
+        // ========================================
+        // REMOVE ITEM
+        // ========================================
+        async function removeItem(cartItemId) {
+            if (!confirm('Remove this item from cart?')) return;
+
+            const userId = localStorage.getItem('user_id');
+
+            try {
+                const response = await fetch(`http://localhost:5500/api/cart/remove/${cartItemId}`, {
+                    method: 'DELETE',
+                    headers: { 'user-id': userId }
+                });
+
+                if (!response.ok) throw new Error('Failed to remove item');
+
+                // Reload cart
+                await loadCart();
+
+            } catch (error) {
+                console.error('❌ Remove item error:', error);
+                alert('Failed to remove item');
+            }
+        }
+
+        // ========================================
+        // CLEAR CART
+        // ========================================
+        async function clearCart() {
+            if (!confirm('Clear all items from your cart?')) return;
+
+            const userId = localStorage.getItem('user_id');
+
+            try {
+                const response = await fetch('http://localhost:5500/api/cart/clear', {
+                    method: 'DELETE',
+                    headers: { 'user-id': userId }
+                });
+
+                if (!response.ok) throw new Error('Failed to clear cart');
+
+                // Reload cart
+                await loadCart();
+
+            } catch (error) {
+                console.error('❌ Clear cart error:', error);
+                alert('Failed to clear cart');
+            }
+        }
+
+        // ========================================
+        // PROCEED TO CHECKOUT
+        // ========================================
+        function proceedToCheckout() {
+            alert('Checkout functionality coming soon!');
+            // TODO: Implement checkout page
+        }
+    </script>
+</body>
+</html>
