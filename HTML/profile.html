@@ -6,301 +6,55 @@
     <title>Your Account - Amazon</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f3f3f3;
-        }
-
-        .navbar {
-            background-color: #131921;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .back-btn {
-            background: none;
-            border: 1px solid #fff;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-btn:hover {
-            background: #374151;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .profile-header {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .profile-header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .profile-header p {
-            color: #565959;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #ddd;
-        }
-
-        .tab {
-            padding: 12px 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            color: #565959;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .tab:hover {
-            color: #000;
-        }
-
-        .tab.active {
-            color: #c45500;
-            border-bottom-color: #c45500;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .info-card, .action-card {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #0F1111;
-        }
-
-        .info-value {
-            color: #565959;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #a6a6a6;
-            border-radius: 3px;
-            font-size: 14px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #e77600;
-            box-shadow: 0 0 3px 2px rgba(228,121,17,0.5);
-        }
-
-        .btn {
-            padding: 10px 24px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(to bottom,#f7dfa5,#f0c14b);
-            border: 1px solid #a88734;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(to bottom,#f5d78e,#edb933);
-        }
-
-        .btn-secondary {
-            background: white;
-            border: 1px solid #d5d9d9;
-            color: #0F1111;
-        }
-
-        .btn-secondary:hover {
-            background: #f7f8f8;
-        }
-
-        .btn-danger {
-            background: #d32f2f;
-            color: white;
-            border: 1px solid #b71c1c;
-        }
-
-        .btn-danger:hover {
-            background: #b71c1c;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .alert.show {
-            display: block;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-
-        .danger-zone {
-            border: 2px solid #d32f2f;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 30px;
-        }
-
-        .danger-zone h3 {
-            color: #d32f2f;
-            margin-bottom: 15px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            color: #d32f2f;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: #888;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .loading {
-            display: none;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #333;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        /* CSS Remains the same */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #f3f3f3; }
+        .navbar { background-color: #131921; color: white; padding: 15px 20px; display: flex; align-items: center; gap: 20px; }
+        .logo { font-size: 24px; font-weight: bold; cursor: pointer; }
+        .back-btn { background: none; border: 1px solid #fff; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .back-btn:hover { background: #374151; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .profile-header { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .profile-header h1 { font-size: 28px; margin-bottom: 10px; }
+        .profile-header p { color: #565959; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 12px 24px; background: none; border: none; cursor: pointer; font-size: 16px; color: #565959; border-bottom: 3px solid transparent; transition: all 0.2s; }
+        .tab:hover { color: #000; }
+        .tab.active { color: #c45500; border-bottom-color: #c45500; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .info-card, .action-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .info-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #ddd; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-weight: 600; color: #0F1111; }
+        .info-value { color: #565959; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #a6a6a6; border-radius: 3px; font-size: 14px; }
+        .form-group input:focus { outline: none; border-color: #e77600; box-shadow: 0 0 3px 2px rgba(228,121,17,0.5); }
+        .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .btn-primary { background: linear-gradient(to bottom,#f7dfa5,#f0c14b); border: 1px solid #a88734; }
+        .btn-primary:hover { background: linear-gradient(to bottom,#f5d78e,#edb933); }
+        .btn-secondary { background: white; border: 1px solid #d5d9d9; color: #0F1111; }
+        .btn-secondary:hover { background: #f7f8f8; }
+        .btn-danger { background: #d32f2f; color: white; border: 1px solid #b71c1c; }
+        .btn-danger:hover { background: #b71c1c; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .alert { padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
+        .alert.show { display: block; }
+        .alert-success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .alert-error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .danger-zone { border: 2px solid #d32f2f; border-radius: 8px; padding: 20px; margin-top: 30px; }
+        .danger-zone h3 { color: #d32f2f; margin-bottom: 15px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; padding: 30px; border-radius: 8px; max-width: 500px; width: 90%; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { color: #d32f2f; }
+        .close-modal { background: none; border: none; font-size: 28px; cursor: pointer; color: #888; }
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .loading { display: none; width: 16px; height: 16px; border: 2px solid #f3f3f3; border-top: 2px solid #333; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -319,18 +73,17 @@
         </div>
 
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('details')">
+            <button class="tab active" onclick="switchTab(event, 'details')">
                 <i class="fa-solid fa-user"></i> Account Details
             </button>
-            <button class="tab" onclick="switchTab('edit')">
+            <button class="tab" onclick="switchTab(event, 'edit')">
                 <i class="fa-solid fa-edit"></i> Edit Profile
             </button>
-            <button class="tab" onclick="switchTab('security')">
+            <button class="tab" onclick="switchTab(event, 'security')">
                 <i class="fa-solid fa-shield"></i> Security
             </button>
         </div>
 
-        <!-- Account Details Tab -->
         <div id="details-tab" class="tab-content active">
             <div class="info-card">
                 <h2 style="margin-bottom: 20px;">Personal Information</h2>
@@ -353,13 +106,10 @@
             </div>
         </div>
 
-        <!-- Edit Profile Tab -->
         <div id="edit-tab" class="tab-content">
             <div class="action-card">
                 <h2 style="margin-bottom: 20px;">Update Your Information</h2>
-                
                 <div id="editAlert" class="alert"></div>
-
                 <form id="editForm">
                     <div class="form-group">
                         <label>First Name</label>
@@ -378,7 +128,7 @@
                             <span class="loading" id="editLoading"></span>
                             Save Changes
                         </button>
-                        <button type="button" class="btn btn-secondary" onclick="switchTab('details')">
+                        <button type="button" class="btn btn-secondary" onclick="switchTab(event, 'details')">
                             Cancel
                         </button>
                     </div>
@@ -386,13 +136,10 @@
             </div>
         </div>
 
-        <!-- Security Tab -->
         <div id="security-tab" class="tab-content">
             <div class="action-card">
                 <h2 style="margin-bottom: 20px;">Change Password</h2>
-                
                 <div id="passwordAlert" class="alert"></div>
-
                 <form id="passwordForm">
                     <div class="form-group">
                         <label>Current Password</label>
@@ -413,7 +160,6 @@
                 </form>
             </div>
 
-            <!-- Danger Zone -->
             <div class="danger-zone">
                 <h3><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</h3>
                 <p style="margin-bottom: 15px; color: #565959;">
@@ -426,7 +172,6 @@
         </div>
     </div>
 
-    <!-- Delete Account Modal -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -463,89 +208,77 @@
     </div>
 
     <script>
-        // ========================================
-        // GLOBAL STATE
-        // ========================================
-        let currentUser = null;
+        const API_URL = 'http://localhost:3000/api/auth'; // ✅ Matches Port 3000
 
-        // ========================================
-        // INITIALIZATION
-        // ========================================
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            loadProfile();
-        });
+        // 1. Helper Function: Get Headers with Token
+        function getAuthHeaders() {
+            const token = localStorage.getItem('token');
+            if (!token) return {}; 
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            };
+        }
 
-        function checkAuth() {
-            const userId = localStorage.getItem('user_id');
-            if (!userId) {
+        // 2. Check Auth on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
                 alert('Please sign in to view your profile');
                 window.location.href = 'signin.html';
                 return;
             }
-        }
+            loadProfile();
+        });
 
-        // ========================================
-        // LOAD PROFILE DATA
-        // ========================================
+        // 3. Load Profile Data
         async function loadProfile() {
-            const userId = localStorage.getItem('user_id');
-            
             try {
-                const response = await fetch('http://localhost:5500/api/auth/profile', {
-                    headers: {
-                        'user-id': userId
-                    }
+                console.log('📡 Fetching profile from Port 3000...');
+                const response = await fetch(`${API_URL}/profile`, {
+                    method: 'GET',
+                    headers: getAuthHeaders()
                 });
 
-                if (!response.ok) throw new Error('Failed to load profile');
+                if (response.status === 401 || response.status === 403) {
+                    throw new Error('Session expired. Please sign in again.');
+                }
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to load profile');
+                }
 
                 const data = await response.json();
-                currentUser = data.user;
+                const user = data.user;
 
-                // Display data
-                document.getElementById('displayName').textContent = 
-                    `${currentUser.first_name} ${currentUser.last_name}`;
-                document.getElementById('displayEmail').textContent = currentUser.email;
-                document.getElementById('displayPhone').textContent = 
-                    currentUser.phone || 'Not provided';
-                document.getElementById('displayCreated').textContent = 
-                    new Date(currentUser.created_at).toLocaleDateString();
-                document.getElementById('userEmail').textContent = currentUser.email;
+                // Update UI
+                document.getElementById('displayName').textContent = `${user.first_name} ${user.last_name}`;
+                document.getElementById('displayEmail').textContent = user.email;
+                document.getElementById('displayPhone').textContent = user.phone || 'Not provided';
+                document.getElementById('displayCreated').textContent = new Date(user.created_at).toLocaleDateString();
+                document.getElementById('userEmail').textContent = user.email;
 
-                // Populate edit form
-                document.getElementById('editFirstName').value = currentUser.first_name;
-                document.getElementById('editLastName').value = currentUser.last_name;
-                document.getElementById('editPhone').value = currentUser.phone || '';
+                // Pre-fill Forms
+                document.getElementById('editFirstName').value = user.first_name;
+                document.getElementById('editLastName').value = user.last_name;
+                document.getElementById('editPhone').value = user.phone || '';
 
             } catch (error) {
-                console.error('❌ Load profile error:', error);
-                alert('Failed to load profile data');
+                console.error('❌ Error:', error);
+                if (error.message.includes('Session expired')) {
+                    alert(error.message);
+                    localStorage.clear();
+                    window.location.href = 'signin.html';
+                } else {
+                    document.getElementById('userEmail').textContent = 'Error loading data';
+                }
             }
         }
 
-        // ========================================
-        // TAB SWITCHING
-        // ========================================
-        function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            event.target.closest('.tab').classList.add('active');
-
-            // Update content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(`${tabName}-tab`).classList.add('active');
-        }
-
-        // ========================================
-        // EDIT PROFILE
-        // ========================================
+        // 4. Update Profile Logic
         document.getElementById('editForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
-            const userId = localStorage.getItem('user_id');
             const alertDiv = document.getElementById('editAlert');
             const loading = document.getElementById('editLoading');
 
@@ -558,34 +291,22 @@
             loading.style.display = 'inline-block';
 
             try {
-                const response = await fetch('http://localhost:5500/api/auth/profile', {
+                const response = await fetch(`${API_URL}/profile`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'user-id': userId
-                    },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify(data)
                 });
 
                 const result = await response.json();
-
                 if (!response.ok) throw new Error(result.error);
 
-                // Update localStorage
                 localStorage.setItem('first_name', result.user.first_name);
 
-                // Show success
                 alertDiv.textContent = '✓ Profile updated successfully!';
                 alertDiv.className = 'alert alert-success show';
+                loadProfile();
 
-                // Reload profile data
-                await loadProfile();
-
-                // Switch to details tab
-                setTimeout(() => {
-                    switchTab('details');
-                    alertDiv.classList.remove('show');
-                }, 2000);
+                setTimeout(() => alertDiv.classList.remove('show'), 2000);
 
             } catch (error) {
                 alertDiv.textContent = '⚠ ' + error.message;
@@ -595,65 +316,41 @@
             }
         });
 
-        // ========================================
-        // CHANGE PASSWORD
-        // ========================================
+        // 5. Change Password Logic
         document.getElementById('passwordForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
-            const userId = localStorage.getItem('user_id');
             const alertDiv = document.getElementById('passwordAlert');
             const loading = document.getElementById('passwordLoading');
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmNewPassword').value;
 
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmNewPassword').value;
-
-            if (newPassword !== confirmPassword) {
-                alertDiv.textContent = '⚠ New passwords do not match';
-                alertDiv.className = 'alert alert-error show';
-                return;
-            }
-
-            if (newPassword.length < 6) {
-                alertDiv.textContent = '⚠ Password must be at least 6 characters';
+            if (newPass !== confirmPass) {
+                alertDiv.textContent = '⚠ Passwords do not match';
                 alertDiv.className = 'alert alert-error show';
                 return;
             }
 
             const data = {
-                first_name: currentUser.first_name,
-                last_name: currentUser.last_name,
-                phone: currentUser.phone,
-                current_password: currentPassword,
-                new_password: newPassword
+                current_password: document.getElementById('currentPassword').value,
+                new_password: newPass
             };
 
             loading.style.display = 'inline-block';
 
             try {
-                const response = await fetch('http://localhost:5500/api/auth/profile', {
+                const response = await fetch(`${API_URL}/profile`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'user-id': userId
-                    },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify(data)
                 });
 
                 const result = await response.json();
-
                 if (!response.ok) throw new Error(result.error);
 
                 alertDiv.textContent = '✓ Password changed successfully!';
                 alertDiv.className = 'alert alert-success show';
-
-                // Clear form
-                this.reset();
-
-                setTimeout(() => {
-                    alertDiv.classList.remove('show');
-                }, 3000);
+                document.getElementById('passwordForm').reset();
+                setTimeout(() => alertDiv.classList.remove('show'), 3000);
 
             } catch (error) {
                 alertDiv.textContent = '⚠ ' + error.message;
@@ -663,57 +360,29 @@
             }
         });
 
-        // ========================================
-        // DELETE ACCOUNT MODAL
-        // ========================================
-        function openDeleteModal() {
-            document.getElementById('deleteModal').classList.add('show');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('show');
-            document.getElementById('deleteForm').reset();
-            document.getElementById('deleteAlert').classList.remove('show');
-        }
-
+        // 6. Delete Account Logic
         document.getElementById('deleteForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
-            const userId = localStorage.getItem('user_id');
-            const alertDiv = document.getElementById('deleteAlert');
             const loading = document.getElementById('deleteLoading');
+            const alertDiv = document.getElementById('deleteAlert');
 
             const password = document.getElementById('deletePassword').value;
             const confirm = document.getElementById('deleteConfirm').value;
 
-            if (confirm !== 'DELETE') {
-                alertDiv.textContent = '⚠ Please type DELETE to confirm';
-                alertDiv.className = 'alert alert-error show';
-                return;
-            }
-
             loading.style.display = 'inline-block';
 
             try {
-                const response = await fetch('http://localhost:5500/api/auth/account', {
+                const response = await fetch(`${API_URL}/account`, {
                     method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'user-id': userId
-                    },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify({ password, confirm })
                 });
 
                 const result = await response.json();
-
                 if (!response.ok) throw new Error(result.error);
 
-                alert('Account deleted successfully. You will be redirected to the homepage.');
-                
-                // Clear all user data
+                alert('Account deleted. Redirecting...');
                 localStorage.clear();
-                
-                // Redirect to home
                 window.location.href = 'index.html';
 
             } catch (error) {
@@ -723,6 +392,16 @@
                 loading.style.display = 'none';
             }
         });
+
+        // Tabs & Modals
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+        function openDeleteModal() { document.getElementById('deleteModal').classList.add('show'); }
+        function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('show'); }
     </script>
 </body>
 </html>

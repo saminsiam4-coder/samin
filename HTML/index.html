@@ -185,6 +185,7 @@
                 <div class="logo"></div>
             </div>
 
+         
             <div class="nav-address">
                 <p class="add-first">Deliver to</p>
                 <div class="add-icon">
@@ -452,7 +453,7 @@
             if (!userId) return;
 
             try {
-                const response = await fetch('http://localhost:5500/api/cart/count', {
+                const response = await fetch('http://localhost:3000/api/cart/count', {
                     headers: { 'user-id': userId }
                 });
                 
@@ -487,7 +488,7 @@
                 
                 if (mainShopSection) mainShopSection.style.display = 'none';
 
-                const response = await fetch(`http://localhost:5500/api/products/search?q=${encodeURIComponent(query)}`);
+                const response = await fetch(`http://localhost:3000/api/products/search?q=${encodeURIComponent(query)}`);
                 
                 if (!response.ok) throw new Error('Network response was not ok');
 
@@ -583,7 +584,7 @@
             }
 
             try {
-                const response = await fetch('http://localhost:5500/api/cart/add', {
+                const response = await fetch('http://localhost:3000/api/cart/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -335,7 +335,7 @@
             contentDiv.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading cart...</div>';
 
             try {
-                const response = await fetch('http://localhost:5500/api/cart', {
+                const response = await fetch('http://localhost:3000/api/cart', {
                     headers: { 'user-id': userId }
                 });
 
@@ -462,7 +462,7 @@
             const userId = localStorage.getItem('user_id');
 
             try {
-                const response = await fetch(`http://localhost:5500/api/cart/update/${cartItemId}`, {
+                const response = await fetch(`http://localhost:3000/api/cart/update/${cartItemId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -494,7 +494,7 @@
             const userId = localStorage.getItem('user_id');
 
             try {
-                const response = await fetch(`http://localhost:5500/api/cart/remove/${cartItemId}`, {
+                const response = await fetch(`http://localhost:3000/api/cart/remove/${cartItemId}`, {
                     method: 'DELETE',
                     headers: { 'user-id': userId }
                 });
@@ -519,7 +519,7 @@
             const userId = localStorage.getItem('user_id');
 
             try {
-                const response = await fetch('http://localhost:5500/api/cart/clear', {
+                const response = await fetch('http://localhost:3000/api/cart/clear', {
                     method: 'DELETE',
                     headers: { 'user-id': userId }
                 });

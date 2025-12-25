@@ -324,6 +324,63 @@
                 setLoading(false);
             }
         });
+
+// ... inside your <script> tag ...
+
+form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideAlert();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    // ... validation checks ...
+
+    setLoading(true);
+
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/signin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+        console.log('📥 Server sent:', result); // Check your console for this!
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Signin failed');
+        }
+
+        // ▼▼▼ PASTE THIS UPDATED SECTION HERE ▼▼▼
+        if (result.token) {
+            console.log('✅ Token found:', result.token);
+            
+            // 1. Save the Token (Critical)
+            localStorage.setItem('token', result.token);
+            
+            // 2. Save User Info (using the flat structure)
+            localStorage.setItem('user_id', result.user_id);
+            localStorage.setItem('first_name', result.first_name);
+
+            showAlert('✓ Sign in successful!', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        } else {
+            throw new Error('Login succeeded but no token was received.');
+        }
+        // ▲▲▲ END OF UPDATED SECTION ▲▲▲
+
+    } catch (error) {
+        console.error('❌ Signin error:', error);
+        showAlert('⚠ ' + error.message, 'error');
+    } finally {
+        setLoading(false);
+    }
+});
+
     </script>
 </body>
 </html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Auth Fix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #e81123;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .status-box {
+            background: #f8f9fa;
+            border-left: 4px solid #e81123;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .status-box h3 {
+            color: #e81123;
+            margin-bottom: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .value {
+            color: #666;
+        }
+
+        .value.error {
+            color: #e81123;
+            font-weight: bold;
+        }
+
+        .value.success {
+            color: #107c10;
+            font-weight: bold;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #e81123;
+            color: white;
+        }
+
+        .btn-primary {
+            background: #0078d4;
+            color: white;
+        }
+
+        .btn-success {
+            background: #107c10;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0078d4;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        #quickSigninForm {
+            display: none;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .step {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #0078d4;
+        }
+
+        .step h4 {
+            color: #0078d4;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 Authentication Emergency Fix</h1>
+        <p class="subtitle">Fix your login issues in 3 steps</p>
+
+        <div id="alertBox" class="alert"></div>
+
+        <div class="status-box">
+            <h3>Current Authentication Status</h3>
+            <div class="status-item">
+                <span class="label">User ID:</span>
+                <span class="value" id="statusUserId">Checking...</span>
+            </div>
+            <div class="status-item">
+                <span class="label">First Name:</span>
+                <span class="value" id="statusName">Checking...</span>
+            </div>
+            <div class="status-item">
+                <span class="label">Token:</span>
+                <span class="value" id="statusToken">Checking...</span>
+            </div>
+            <div class="status-item">
+                <span class="label">Status:</span>
+                <span class="value" id="statusAuth">Checking...</span>
+            </div>
+        </div>
+
+        <div class="step">
+            <h4>Step 1: Clear All Authentication Data</h4>
+            <p style="margin-bottom: 15px; color: #666;">This will remove all broken login data from your browser.</p>
+            <button class="btn btn-danger" onclick="clearAllAuth()">
+                🗑️ Clear All Auth Data
+            </button>
+        </div>
+
+        <div class="step">
+            <h4>Step 2: Quick Sign In</h4>
+            <p style="margin-bottom: 15px; color: #666;">Sign in again to store your credentials properly.</p>
+            <button class="btn btn-primary" onclick="showQuickSignin()">
+                🔑 Show Sign In Form
+            </button>
+            
+            <div id="quickSigninForm">
+                <form onsubmit="quickSignIn(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="quickEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="quickPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">
+                        ✓ Sign In & Fix Authentication
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="step">
+            <h4>Step 3: Test & Go Shopping</h4>
+            <p style="margin-bottom: 15px; color: #666;">After signing in, test if everything works.</p>
+            <button class="btn btn-success" onclick="testAndRedirect()" id="testBtn" disabled>
+                🛍️ Test & Go to Homepage
+            </button>
+        </div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+
+        <button class="btn btn-primary" onclick="window.location.href='signin.html'">
+            ← Go to Regular Sign In Page
+        </button>
+    </div>
+
+    <script>
+        // Check status on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+        });
+
+        function checkAuthStatus() {
+            const userId = localStorage.getItem('user_id');
+            const firstName = localStorage.getItem('first_name');
+            const token = localStorage.getItem('token');
+
+            document.getElementById('statusUserId').textContent = userId || 'NULL';
+            document.getElementById('statusUserId').className = userId ? 'value success' : 'value error';
+
+            document.getElementById('statusName').textContent = firstName || 'NULL';
+            document.getElementById('statusName').className = firstName ? 'value success' : 'value error';
+
+            document.getElementById('statusToken').textContent = token ? 'EXISTS' : 'NULL';
+            document.getElementById('statusToken').className = token ? 'value success' : 'value error';
+
+            if (userId) {
+                document.getElementById('statusAuth').textContent = '✓ AUTHENTICATED';
+                document.getElementById('statusAuth').className = 'value success';
+                document.getElementById('testBtn').disabled = false;
+            } else {
+                document.getElementById('statusAuth').textContent = '✗ NOT AUTHENTICATED';
+                document.getElementById('statusAuth').className = 'value error';
+                document.getElementById('testBtn').disabled = true;
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
+
+        function clearAllAuth() {
+            if (confirm('This will sign you out and clear all login data. Continue?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                console.log('✅ All authentication data cleared');
+                
+                showAlert('✓ All authentication data cleared! Now use Step 2 to sign in again.', 'success');
+                checkAuthStatus();
+            }
+        }
+
+        function showQuickSignin() {
+            document.getElementById('quickSigninForm').style.display = 'block';
+            document.getElementById('quickEmail').focus();
+        }
+
+        async function quickSignIn(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('quickEmail').value.trim();
+            const password = document.getElementById('quickPassword').value;
+
+            console.log('🔐 Attempting quick signin for:', email);
+
+            try {
+                const response = await fetch('http://localhost:5500/api/auth/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Sign in failed');
+                }
+
+                console.log('✅ Sign in successful! Storing data...');
+
+                // ✅ STORE ALL AUTHENTICATION DATA
+                localStorage.setItem('user_id', result.user_id.toString());
+                localStorage.setItem('first_name', result.first_name);
+                localStorage.setItem('token', result.token || '');
+                localStorage.setItem('currentUser', JSON.stringify({
+                    user_id: result.user_id,
+                    first_name: result.first_name,
+                    last_name: result.last_name,
+                    email: result.email
+                }));
+
+                console.log('📦 Stored data:', {
+                    user_id: localStorage.getItem('user_id'),
+                    first_name: localStorage.getItem('first_name'),
+                    has_token: !!localStorage.getItem('token')
+                });
+
+                showAlert('✓ SUCCESS! Authentication fixed. Click "Test & Go to Homepage" now.', 'success');
+                checkAuthStatus();
+
+                // Clear form
+                document.getElementById('quickSigninForm').reset();
+
+            } catch (error) {
+                console.error('❌ Sign in error:', error);
+                showAlert('✗ Sign in failed: ' + error.message, 'error');
+            }
+        }
+
+        async function testAndRedirect() {
+            const userId = localStorage.getItem('user_id');
+
+            if (!userId) {
+                showAlert('✗ Not authenticated! Please complete Step 2 first.', 'error');
+                return;
+            }
+
+            console.log('🧪 Testing authentication with backend...');
+
+            try {
+                // Test profile endpoint
+                const response = await fetch('http://localhost:5500/api/auth/profile', {
+                    headers: {
+                        'user-id': userId
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Profile test failed');
+                }
+
+                const data = await response.json();
+                console.log('✅ Profile test passed:', data);
+
+                showAlert('✓ All tests passed! Redirecting to homepage...', 'success');
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+
+            } catch (error) {
+                console.error('❌ Test failed:', error);
+                showAlert('✗ Test failed: ' + error.message + ' - Check if backend is running!', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
